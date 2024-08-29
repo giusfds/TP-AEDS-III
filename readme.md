@@ -69,7 +69,7 @@ O projeto utiliza um índice direto baseado em tabela hash extensível para gere
 
 ## Integrantes
 - [Breno Pires](https://www.linkedin.com/in/brenopiressantos/)
-- [Caio Faria](https://www.linkedin.com/in/caio-diniz-629933235/)
+- [Caio Faria](https://www.linkedin.com/in/caiofdiniz)
 - [Giuseppe Cordeiro](https://www.linkedin.com/in/giuseppecordeiro/)
 - [Vinicius Miranda](https://www.linkedin.com/in/vinimiraa/)
 
