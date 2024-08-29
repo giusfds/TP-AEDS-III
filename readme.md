@@ -74,12 +74,13 @@ O projeto utiliza um índice direto baseado em tabela hash extensível para gere
 - [Vinicius Miranda](https://www.linkedin.com/in/vinimiraa/)
 
 **Regras** 
+
 Certifique-se de comentar seu commit seguindo o padrão:
 
-**criação** => create: criar um novo arquivo
-**nova funcionalidade** => feat: nova funcionalidade
-**correção de bug** => fix: correção de bug
-**documentação** => docs: documentação
+- **criação** => create: criar um novo arquivo
+- **nova funcionalidade** => feat: nova funcionalidade
+- **correção de bug** => fix: correção de bug
+- **documentação** => docs: documentação
 
 ## Experiência de Desenvolvimento
 Durante o desenvolvimento do projeto, implementamos todas as funcionalidades básicas exigidas para o CRUD de tarefas. O maior desafio foi a implementação da tabela hash extensível para o índice direto, mas conseguimos alcançar os resultados esperados. A experiência foi enriquecedora, pois nos permitiu aplicar conceitos teóricos em um cenário prático.
