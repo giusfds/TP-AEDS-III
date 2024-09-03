@@ -32,5 +32,6 @@ public class Tarefa {
         dos.writeByte(this.prioridade); // prioridade
 
         return baos.toByteArray();
+        
     }
 }
