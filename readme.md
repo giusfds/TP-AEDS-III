@@ -30,6 +30,66 @@ Cada tarefa possui os seguintes atributos:
 6. Envie sua branch: `git push origin minha-branch`.
 7. Crie um pull request.
 
+#### Como criar sua branch
+
+##### 1. Certifique-se de que você está no repositório correto.
+```bash
+cd caminho/para/seu/repositorio
+```
+
+##### 2. Atualize seu repositório local com as últimas mudanças do repositório remoto (opcional, mas recomendado).
+```bash
+git fetch origin
+```
+
+##### 3. Crie uma nova branch com o nome desejado. Substitua `nome-da-branch` pelo nome que você deseja dar à sua branch.
+```bash
+git checkout -b nome-da-branch
+```
+
+##### 4. (Opcional) Se quiser criar a branch a partir de uma branch específica, certifique-se de que está nessa branch antes de criar a nova.
+```bash
+git checkout branch-existente
+git checkout -b nome-da-branch
+```
+
+#### Se o seu repositorio ficar obisoleto com o repositorio Dev
+
+1. Caso isso venha a acontecer, execulte o segunte comando para atualizar o seu repositorio local
+```bash
+git pull origin NOME_DA_BRANCH
+```
+no nosso caso, vc substituiria NOME_DA_BRANCH por dev
+
+#### Como criar um Pull Request
+
+##### 1. Certifique-se de que você está no repositório correto.
+```bash
+cd caminho/para/seu/repositorio
+```
+##### 2. Atualize seu repositório local com as últimas mudanças do repositório remoto (opcional, mas recomendado).
+```bash
+git fetch origin
+```
+##### 3. Crie e mude para uma nova branch para realizar suas alterações.
+```bash
+git checkout -b nome-da-branch
+```
+##### 4. Faça as alterações necessárias no código.
+
+##### 5. Adicione as alterações ao índice (staging area).
+```bash
+git add .
+```
+##### 6. Faça o commit das suas alterações com uma mensagem descritiva.
+```bash
+git commit -m "Descrição das mudanças realizadas"
+```
+##### 7. Envie sua nova branch para o repositório remoto.
+```bash
+git push origin nome-da-branch
+```
+
 **Atenção:** Certifique-se de que todas as alterações sejam enviadas para a branch `dev` e não para a branch `main`. A branch `main` é reservada para a versão estável e final do projeto.
 
 ## Estrutura do Registro
