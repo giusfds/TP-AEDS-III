@@ -9,9 +9,11 @@ public class Arquivo<T extends Registro> {
     RandomAccessFile arquivo;
     String nomeArquivo;
     Constructor<T> construtor;
+
     HashExtensivel<ParIDEndereco> indiceDireto;
 
     public Arquivo(String na, Constructor<T> c) throws Exception {
+
         File d = new File(".\\dados");
         if (!d.exists())
             d.mkdir();
@@ -23,6 +25,7 @@ public class Arquivo<T extends Registro> {
             // inicializa o arquivo, criando seu cabecalho
             arquivo.writeInt(0);
         }
+
 
         indiceDireto = new HashExtensivel<>(ParIDEndereco.class.getConstructor(), 4, this.nomeArquivo + ".d.idx",
                 this.nomeArquivo + ".c.idx");
@@ -36,14 +39,11 @@ public class Arquivo<T extends Registro> {
         obj.setId(proximoID);
         arquivo.seek(arquivo.length());
         long endereco = arquivo.getFilePointer();
-
         byte[] b = obj.toByteArray();
         arquivo.writeByte(' ');
         arquivo.writeShort(b.length);
         arquivo.write(b);
-
         indiceDireto.create(new ParIDEndereco(proximoID, endereco));
-
         return obj.getId();
     }
 
@@ -56,6 +56,8 @@ public class Arquivo<T extends Registro> {
         ParIDEndereco pid = indiceDireto.read(id);
         if (pid != null) {
             arquivo.seek(pid.getEndereco());
+        arquivo.seek(TAM_CABECALHO);
+        while (arquivo.getFilePointer() < arquivo.length()) {
             obj = construtor.newInstance();
             lapide = arquivo.readByte();
             tam = arquivo.readShort();

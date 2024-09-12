@@ -4,6 +4,7 @@ import java.time.LocalDate;
 public class IO {
 
     public static void main(String[] args) {
+
         Arquivo<Tarefa> arqTarefas;
         Tarefa c1 = new Tarefa("Aniversario Breno", LocalDate.of(2004, 9, 15), LocalDate.of(2004, 9, 16), (byte) 0,
                 (byte) 1);
@@ -15,6 +16,7 @@ public class IO {
         try {
 
             // apaga o arquivo atual
+
             File f = new File(".\\dados\\Tarefas.db");
             File f2 = new File(".\\dados\\Tarefas.db.c.idx");
             File f3 = new File(".\\dados\\Tarefas.db.d.idx");
@@ -48,6 +50,7 @@ public class IO {
                 System.out.println("\nTarefa não encontrado!");
 
             arqTarefas.close();
+
 
         } catch (Exception e) {
             e.printStackTrace();

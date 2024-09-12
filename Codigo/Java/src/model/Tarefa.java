@@ -18,12 +18,14 @@ public class Tarefa implements Registro {
     }
 
     public Tarefa(String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade) {
+
         this.nome = nome;
         this.dataCriacao = dataCriacao;
         this.dataConclusao = dataConclusao;
         this.status = status;
         this.prioridade = prioridade;
     }
+
 
     public Tarefa(int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade) {
         this.id = id;
@@ -77,5 +79,5 @@ public class Tarefa implements Registro {
         this.prioridade = dis.readByte();
     }
 
-    // implementar fromByteArray
+
 }
