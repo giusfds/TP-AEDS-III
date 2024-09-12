@@ -1,6 +1,7 @@
 # Trabalho Pratico AEDs 3
 
 ## Descrição
+
 Este projeto tem como objetivo a implementação de um CRUD (Create, Read, Update, Delete) genérico em Java, capaz de manipular entidades armazenadas em arquivos. O foco inicial do projeto é gerenciar tarefas, incluindo operações como inclusão, leitura, atualização e exclusão de registros.
 
 Cada tarefa possui os seguintes atributos:
@@ -93,6 +94,7 @@ git push origin nome-da-branch
 **Atenção:** Certifique-se de que todas as alterações sejam enviadas para a branch `dev` e não para a branch `main`. A branch `main` é reservada para a versão estável e final do projeto.
 
 ## Estrutura do Registro
+
 Os registros no arquivo são compostos por três partes:
 
 1. **Lápide**: Byte que indica se o registro é válido ou foi excluído.
@@ -100,17 +102,23 @@ Os registros no arquivo são compostos por três partes:
 3. **Vetor de Bytes**: Dados da entidade convertidos em bytes.
 
 ### Operações Implementadas
+
 As operações de CRUD são realizadas por uma classe genérica `Arquivo<T>` que pode manipular qualquer entidade que implemente a interface `Registro`. A interface `Registro` define os métodos necessários para que uma entidade possa ser armazenada e manipulada no arquivo.
 
 ### Índice Direto
+
 O projeto utiliza um índice direto baseado em tabela hash extensível para gerenciar os registros. Este índice armazena a chave primária (ID) e o endereço do registro, facilitando as operações de busca, inserção, atualização e exclusão.
 
 ## Estrutura do Projeto
+
 ### Classes Principais
-- Arquivo<T extends Registro>: Classe genérica que gerencia as operações de CRUD no arquivo de dados.
+
+- Arquivo`<T extends Registro>`: Classe genérica que gerencia as operações de CRUD no arquivo de dados.
 - Tarefa: Classe que representa a entidade Tarefa, implementando a interface Registro.
 - Teste: Classe principal que realiza testes das operações CRUD utilizando a entidade Tarefa.
+
 ### Métodos Principais
+
 - create(T objeto): Insere um novo registro no arquivo e retorna o ID gerado.
 - read(int id): Lê um registro do arquivo com base no ID e retorna o objeto correspondente.
 - update(T objeto): Atualiza um registro existente no arquivo com base no ID do objeto.
@@ -128,12 +136,14 @@ O projeto utiliza um índice direto baseado em tabela hash extensível para gere
 - O trabalho é original e não a cópia de um trabalho de outro grupo?
 
 ## Integrantes
+
 - [Breno Pires](https://www.linkedin.com/in/brenopiressantos/)
 - [Caio Faria](https://www.linkedin.com/in/caiofdiniz)
 - [Giuseppe Cordeiro](https://www.linkedin.com/in/giuseppecordeiro/)
 - [Vinicius Miranda](https://www.linkedin.com/in/vinimiraa/)
 
-**Regras** 
+
+**Regras**
 
 Certifique-se de comentar seu commit seguindo o padrão:
 
@@ -143,5 +153,5 @@ Certifique-se de comentar seu commit seguindo o padrão:
 - **documentação** => docs: documentação
 
 ## Experiência de Desenvolvimento
-Durante o desenvolvimento do projeto, implementamos todas as funcionalidades básicas exigidas para o CRUD de tarefas. O maior desafio foi a implementação da tabela hash extensível para o índice direto, mas conseguimos alcançar os resultados esperados. A experiência foi enriquecedora, pois nos permitiu aplicar conceitos teóricos em um cenário prático.
 
+Durante o desenvolvimento do projeto, implementamos todas as funcionalidades básicas exigidas para o CRUD de tarefas. O maior desafio foi a implementação da tabela hash extensível para o índice direto, mas conseguimos alcançar os resultados esperados. A experiência foi enriquecedora, pois nos permitiu aplicar conceitos teóricos em um cenário prático.

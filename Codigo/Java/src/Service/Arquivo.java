@@ -1,3 +1,4 @@
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -9,7 +10,10 @@ public class Arquivo<T extends Registro> {
     String nomeArquivo;
     Constructor<T> construtor;
 
-    public Arquivo(String na, Constructor<T> c) throws IOException {
+    HashExtensivel<ParIDEndereco> indiceDireto;
+
+    public Arquivo(String na, Constructor<T> c) throws Exception {
+
         File d = new File(".\\dados");
         if (!d.exists())
             d.mkdir();
@@ -21,21 +25,25 @@ public class Arquivo<T extends Registro> {
             // inicializa o arquivo, criando seu cabecalho
             arquivo.writeInt(0);
         }
+
+
+        indiceDireto = new HashExtensivel<>(ParIDEndereco.class.getConstructor(), 4, this.nomeArquivo + ".d.idx",
+                this.nomeArquivo + ".c.idx");
     }
 
-    public int create(T obj) throws IOException {
+    public int create(T obj) throws Exception {
         arquivo.seek(0);
         int proximoID = arquivo.readInt() + 1;
         arquivo.seek(0);
         arquivo.writeInt(proximoID);
         obj.setId(proximoID);
         arquivo.seek(arquivo.length());
-
+        long endereco = arquivo.getFilePointer();
         byte[] b = obj.toByteArray();
         arquivo.writeByte(' ');
         arquivo.writeShort(b.length);
         arquivo.write(b);
-
+        indiceDireto.create(new ParIDEndereco(proximoID, endereco));
         return obj.getId();
     }
 
@@ -44,6 +52,10 @@ public class Arquivo<T extends Registro> {
         short tam;
         byte[] b;
         byte lapide;
+        System.out.println("ID: " + id);
+        ParIDEndereco pid = indiceDireto.read(id);
+        if (pid != null) {
+            arquivo.seek(pid.getEndereco());
         arquivo.seek(TAM_CABECALHO);
         while (arquivo.getFilePointer() < arquivo.length()) {
             obj = construtor.newInstance();
@@ -51,7 +63,6 @@ public class Arquivo<T extends Registro> {
             tam = arquivo.readShort();
             b = new byte[tam];
             arquivo.read(b);
-
             if (lapide == ' ') {
                 obj.fromByteArray(b);
                 if (obj.getId() == id)
