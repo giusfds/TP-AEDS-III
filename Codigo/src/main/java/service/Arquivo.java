@@ -144,38 +144,39 @@ public class Arquivo<T extends Registro>
         short tam;
         byte[] b;
         byte lapide;
-        Long endereco;
-        arquivo.seek(TAM_CABECALHO);
-        while (arquivo.getFilePointer() < arquivo.length()) {
+        ParIDEndereco pie = indiceDireto.read(novoObj.getId());
+        if( pie!=null ) {
+            arquivo.seek(pie.getEndereco());
             obj = construtor.newInstance();
-            endereco = arquivo.getFilePointer();
             lapide = arquivo.readByte();
-            tam = arquivo.readShort();
-            b = new byte[tam];
-            arquivo.read(b);
 
-            if ( lapide == ' ' ) {
+            if( lapide==' ' ) {
+                tam = arquivo.readShort();
+                b = new byte[tam];
+                arquivo.read(b);
                 obj.fromByteArray(b);
-                if ( obj.getId() == novoObj.getId() ) {
 
+                if( obj.getId()==novoObj.getId() ) {
                     byte[] b2 = novoObj.toByteArray();
-                    short tam2 = (short) b2.length;
+                    short tam2 = (short)b2.length;
 
-                    if ( tam2 <= tam ) {
-                        arquivo.seek(endereco + 3);
+                    if( tam2 <= tam ) { // sobrescreve o registro
+                        arquivo.seek(pie.getEndereco()+3);
                         arquivo.write(b2);
-                    } else {
-                        arquivo.seek(endereco);
+                    } else { // move o novo registro para o fim
+                        arquivo.seek(pie.getEndereco());
                         arquivo.write('*');
                         arquivo.seek(arquivo.length());
+                        long novoEndereco = arquivo.getFilePointer();
                         arquivo.writeByte(' ');
                         arquivo.writeShort(tam2);
                         arquivo.write(b2);
-                    }  // end if
+                        indiceDireto.update(new ParIDEndereco(novoObj.getId(), novoEndereco));
+                    } // end if
                     result = true;
                 } // end if
             } // end if
-        } // end while
+        } // end if
         return result;
     } // end update ( )
 
