@@ -1,17 +1,19 @@
+package app;
+
 import java.io.File;
 import java.time.LocalDate;
 
-public class IO {
+import model.Tarefa;
+import service.Arquivo;
+
+public class Teste {
 
     public static void main(String[] args) {
 
         Arquivo<Tarefa> arqTarefas;
-        Tarefa c1 = new Tarefa("Aniversario Breno", LocalDate.of(2004, 9, 15), LocalDate.of(2004, 9, 16), (byte) 0,
-                (byte) 1);
-        Tarefa c2 = new Tarefa("teste1", LocalDate.of(2004, 9, 15), LocalDate.of(2004, 9, 16), (byte) 0,
-                (byte) 1);
-        Tarefa c3 = new Tarefa("teste3", LocalDate.of(2004, 9, 15), LocalDate.of(2004, 9, 16), (byte) 0,
-                (byte) 1);
+        Tarefa c1 = new Tarefa("Aniversario Breno", LocalDate.of(2004, 9, 15), LocalDate.of(2004, 9, 16), (byte) 0, (byte) 1);
+        Tarefa c2 = new Tarefa("teste1", LocalDate.of(2004, 9, 15), LocalDate.of(2004, 9, 16), (byte) 0, (byte) 1);
+        Tarefa c3 = new Tarefa("teste3", LocalDate.of(2004, 9, 15), LocalDate.of(2004, 9, 16), (byte) 0, (byte) 1);
 
         try {
 
@@ -41,7 +43,7 @@ public class IO {
             else
                 System.out.println("\nTarefa não encontrado!");
 
-            c2.nome = "caio";
+            c2.setNome("caio");
             arqTarefas.update(c2);
             c = arqTarefas.read(2);
             if (c != null)
