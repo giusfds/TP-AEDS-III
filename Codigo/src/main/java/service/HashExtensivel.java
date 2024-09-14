@@ -12,6 +12,7 @@ disciplina:
 Implementado pelo Prof. Marcos Kutova
 v1.1 - 2021
 */
+package service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -22,6 +23,12 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.lang.reflect.Constructor;
 
+import interfaces.RegistroHashExtensivel;
+
+/**
+ *  HashExtensivel: Classe que implementa a estrutura de dados Hash Extensível.
+ *  Implementa a interface RegistroHashExtensivel.
+ */
 public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
 
   String nomeArquivoDiretorio;
@@ -301,7 +308,7 @@ public class HashExtensivel<T extends RegistroHashExtensivel<T>> {
 
   public boolean create(T elem) throws Exception {
 
-    // Carrega TODO o diretório para a memória
+    // Carrega todo o diretório para a memória
     byte[] bd = new byte[(int) arqDiretorio.length()];
     arqDiretorio.seek(0);
     arqDiretorio.read(bd);

@@ -12,87 +12,6 @@ Cada tarefa possui os seguintes atributos:
 - **Status**: Estado atual da tarefa (Pendente, Em Progresso, Concluída, etc.).
 - **Prioridade**: Nível de prioridade da tarefa.
 
-## Como Usar
-
-### Pré-requisitos
-
-- Java Development Kit (JDK) 8 ou superior.
-- Um ambiente de desenvolvimento Java (Eclipse, IntelliJ IDEA, etc.).
-
-### Passos para Executar
-
-1. Faça um fork deste repositório.
-2. Clone o seu fork: `git clone`.
-3. Crie uma branch: `git checkout -b minha-branch`.
-   - Por favor, não use a branch `main`.
-   - Cada aluno deve criar uma branch com seu nome; eu decidirei se o pull request será aceito ou não, apenas para garantir que seja alguém do grupo.
-4. Faça suas alterações.
-5. Faça o commit das suas alterações: `git commit -m 'minhas alterações'`.
-6. Envie sua branch: `git push origin minha-branch`.
-7. Crie um pull request.
-
-#### Como criar sua branch
-
-##### 1. Certifique-se de que você está no repositório correto.
-```bash
-cd caminho/para/seu/repositorio
-```
-
-##### 2. Atualize seu repositório local com as últimas mudanças do repositório remoto (opcional, mas recomendado).
-```bash
-git fetch origin
-```
-
-##### 3. Crie uma nova branch com o nome desejado. Substitua `nome-da-branch` pelo nome que você deseja dar à sua branch.
-```bash
-git checkout -b nome-da-branch
-```
-
-##### 4. (Opcional) Se quiser criar a branch a partir de uma branch específica, certifique-se de que está nessa branch antes de criar a nova.
-```bash
-git checkout branch-existente
-git checkout -b nome-da-branch
-```
-
-#### Se o seu repositorio ficar obisoleto com o repositorio Dev
-
-1. Caso isso venha a acontecer, execulte o segunte comando para atualizar o seu repositorio local
-```bash
-git pull origin NOME_DA_BRANCH
-```
-no nosso caso, vc substituiria NOME_DA_BRANCH por dev
-
-#### Como criar um Pull Request
-
-##### 1. Certifique-se de que você está no repositório correto.
-```bash
-cd caminho/para/seu/repositorio
-```
-##### 2. Atualize seu repositório local com as últimas mudanças do repositório remoto (opcional, mas recomendado).
-```bash
-git fetch origin
-```
-##### 3. Crie e mude para uma nova branch para realizar suas alterações.
-```bash
-git checkout -b nome-da-branch
-```
-##### 4. Faça as alterações necessárias no código.
-
-##### 5. Adicione as alterações ao índice (staging area).
-```bash
-git add .
-```
-##### 6. Faça o commit das suas alterações com uma mensagem descritiva.
-```bash
-git commit -m "Descrição das mudanças realizadas"
-```
-##### 7. Envie sua nova branch para o repositório remoto.
-```bash
-git push origin nome-da-branch
-```
-
-**Atenção:** Certifique-se de que todas as alterações sejam enviadas para a branch `dev` e não para a branch `main`. A branch `main` é reservada para a versão estável e final do projeto.
-
 ## Estrutura do Registro
 
 Os registros no arquivo são compostos por três partes:
@@ -124,16 +43,55 @@ O projeto utiliza um índice direto baseado em tabela hash extensível para gere
 - update(T objeto): Atualiza um registro existente no arquivo com base no ID do objeto.
 - delete(int id): Marca um registro como excluído no arquivo.
 
+## Experiência de Desenvolvimento
+
+Durante o desenvolvimento do projeto, implementamos todas as funcionalidades básicas necessárias para o CRUD de tarefas. 
+A primeira etapa envolveu a implementação conjunta da classe Tarefa, seguida pela atribuição das funções do CRUD à classe 
+Arquivo para cada membro da equipe.
+
+Conseguimos integrar a classe HashExtensivel sem problemas. A principal dificuldade foi entender o funcionamento global do
+sistema, mas uma vez que esse entendimento foi alcançado, o restante do trabalho fluiu de maneira tranquila.
+
+Além de atender aos requisitos da disciplina, o projeto também proporcionou um aprofundamento significativo no uso do Git,
+devido à estrutura de gerenciamento de branches que adotamos. Essa experiência foi valiosa, pois nos permitiu aplicar 
+conceitos teóricos em um contexto prático e desenvolver habilidades importantes tanto na programação quanto na colaboração 
+em equipe.
+
 ## Checklist
 
 - O trabalho possui um índice direto implementado com a tabela hash extensível?
+   ````
+   SIM
+   ````
 - A operação de inclusão insere um novo registro no fim do arquivo e no índice e retorna o ID desse registro?
+   ````
+   SIM
+   ````
+
 - A operação de busca retorna os dados do registro, após localizá-lo por meio do índice direto?
+   ````
+   SIM
+   ````
 - A operação de alteração altera os dados do registro e trata corretamente as reduções e aumentos no espaço do registro?
+   ````
+   SIM
+   ````
 - A operação de exclusão marca o registro como excluído e o remove do índice direto?
+   ````
+   SIM
+   ````
 - O trabalho está funcionando corretamente?
+   ````
+   SIM
+   ````
 - O trabalho está completo?
+   ````
+   SIM
+   ````
 - O trabalho é original e não a cópia de um trabalho de outro grupo?
+   ````
+   SIM
+   ````
 
 ## Integrantes
 
@@ -142,16 +100,4 @@ O projeto utiliza um índice direto baseado em tabela hash extensível para gere
 - [Giuseppe Cordeiro](https://www.linkedin.com/in/giuseppecordeiro/)
 - [Vinicius Miranda](https://www.linkedin.com/in/vinimiraa/)
 
-
-**Regras**
-
-Certifique-se de comentar seu commit seguindo o padrão:
-
-- **criação** => create: criar um novo arquivo
-- **nova funcionalidade** => feat: nova funcionalidade
-- **correção de bug** => fix: correção de bug
-- **documentação** => docs: documentação
-
-## Experiência de Desenvolvimento
-
-Durante o desenvolvimento do projeto, implementamos todas as funcionalidades básicas exigidas para o CRUD de tarefas. O maior desafio foi a implementação da tabela hash extensível para o índice direto, mas conseguimos alcançar os resultados esperados. A experiência foi enriquecedora, pois nos permitiu aplicar conceitos teóricos em um cenário prático.
+## FIM
