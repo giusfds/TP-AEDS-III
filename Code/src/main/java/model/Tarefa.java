@@ -35,6 +35,16 @@ public class Tarefa implements Registro
         this.prioridade    = prioridade;
     } // end Tarefa ( )
 
+    public Tarefa ( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, int idCategoria ) 
+    {
+        this.nome          = nome;
+        this.dataCriacao   = dataCriacao;
+        this.dataConclusao = dataConclusao;
+        this.status        = status;
+        this.prioridade    = prioridade;
+        this.idCategoria   = idCategoria;
+    } // end Tarefa ( )
+
     public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade )
     {
         this.id            = id;
