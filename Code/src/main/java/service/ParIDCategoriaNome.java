@@ -6,32 +6,36 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import interfaces.RegistroHashExtensivel;
+import interfaces.RegistroArvoreBMais;
 
 /**
  *  ParIDCategoriaNome: Classe que representa um par de ID Categoria e Nome.
- *  Implementa a interface RegistroHashExtensivel.
+ *  Implementa a interface RegistroArvoreBMais.
  */
-public class ParIDCategoriaNome implements RegistroHashExtensivel<ParIDCategoriaNome> 
+public class ParIDCategoriaNome implements RegistroArvoreBMais<ParIDCategoriaNome> 
 {
-    private int id;
+    private int idCategoria;
     private String nome;
-    private final short TAMANHO = 12; // tamanho em bytes
+    private final short TAMANHO = 32; // tamanho em bytes
 
     public ParIDCategoriaNome ( ) 
     {
-        this.id = -1;
-        this.nome = "";
+        this( -1,"" );
     } // end ParIDCategoriaNome ( )
 
-    public ParIDCategoriaNome ( int id, String end ) 
+    public ParIDCategoriaNome ( int idCategoria ) 
     {
-        this.id = id;
-        this.nome = end;
+        this( idCategoria, "" );
     } // end ParIDCategoriaNome ( )
 
-    public int getId ( ) {
-        return id;
+    public ParIDCategoriaNome ( int idCategoria, String nome ) 
+    {
+        this.idCategoria = idCategoria;
+        this.nome = nome;
+    } // end ParIDCategoriaNome ( )
+
+    public int getIDCategoria ( ) {
+        return idCategoria;
     } // end getId ( )
 
     public String getNome ( ) {
@@ -39,16 +43,34 @@ public class ParIDCategoriaNome implements RegistroHashExtensivel<ParIDCategoria
     } // end getNome ( )
 
     @Override
-    public int hashCode ( ) {
-        return this.id;
-    } // end hashCode ( )
+    public ParIDCategoriaNome clone ( ) 
+    {
+        ParIDCategoriaNome ret = null;
+        try {
+            ret = new ParIDCategoriaNome(this.idCategoria, this.nome);
+        } // end try
+        catch ( Exception e ) {
+        } // end catch
+        return ret;
+    } // end clone ( )
+
+    public int compareTo ( ParIDCategoriaNome picn ) 
+    {
+        int result = 0xFFFFFF7;
+        if( this.idCategoria != picn.idCategoria ) {
+            result = this.idCategoria - picn.idCategoria;
+        } else {
+            result = this.nome.compareTo("") == 0 ? 0 : this.nome.compareTo(picn.nome);
+        } // end if
+        return result;
+    } // end compareTo ( )
 
     public short size ( ) {
         return this.TAMANHO;
     } // end size ( )
 
     public String toString ( ) {
-        return "(" + this.id + ";" + this.nome + ")";
+        return String.format("%3d", this.idCategoria) + ";" + this.nome + ")";
     } // end toString ( )
 
     public byte[] toByteArray ( ) throws IOException 
@@ -56,7 +78,7 @@ public class ParIDCategoriaNome implements RegistroHashExtensivel<ParIDCategoria
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
-        dos.writeInt(this.id);
+        dos.writeInt(this.idCategoria);
         dos.writeBytes(this.nome);
         
         return ( baos.toByteArray() );
@@ -67,8 +89,8 @@ public class ParIDCategoriaNome implements RegistroHashExtensivel<ParIDCategoria
         ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
     
-        this.id = dis.readInt();
-        byte[] b = new byte[dis.available()];
+        this.idCategoria = dis.readInt();
+        byte[] b = new byte[28];
         dis.read(b);
         this.nome = new String(b);
     } // end fromByteArray ( )

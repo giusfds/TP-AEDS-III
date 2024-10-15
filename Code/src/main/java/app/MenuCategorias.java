@@ -1,14 +1,14 @@
 package app;
 
-import java.util.Scanner;
-
 import model.Categoria;
 import service.ArquivoCategoria;
 
-public class MenuCategorias 
+/**
+ *  MenuCategorias: Classe de interação com o usuário para manipulação de categorias.
+ */
+public class MenuCategorias extends IO
 {
-    ArquivoCategoria arqCategorias;
-    private static Scanner console = new Scanner( System.in );
+    private static ArquivoCategoria arqCategorias;
 
     public MenuCategorias ( ) throws Exception {
         arqCategorias = new ArquivoCategoria( );
@@ -21,50 +21,54 @@ public class MenuCategorias
             int opcao = 0;
             do 
             {
-                System.out.println("AEDs-III 1.0             ");
-                System.out.println("-----------------------\n");
-                System.out.println("> Início > Categorias    ");
-                System.out.println("1 - Buscar               ");
-                System.out.println("2 - Incluir              ");
-                System.out.println("3 - Alterar              ");
-                System.out.println("4 - Excluir              ");
-                System.out.println("0 - Voltar               ");
-                System.out.print  ("Opção: "                  );
-    
-                try {
-                    opcao = Integer.valueOf( console.nextLine( ) );
-                } catch( NumberFormatException e ) {
-                    opcao = -1;
-                } // end try
-    
-                switch( opcao ) 
-                {
-                    case 1:
-                        // buscarCategoria( );
-                        break;
-                    case 2:
-                        incluirCategoria( );
-                        break;
-                    case 3:
-                        // alterarCategoria( );
-                        break;
-                    case 4:
-                        // excluirCategoria( );
-                        break;
-                    case 0:
-                        break;
-                    default:
-                        System.out.println("Opção inválida!");
-                        break;
-                } // end switch
-
+                opcoes_menu( );
+                opcao = ler_opcao( );
+                executar_opcao(opcao);
             } while( opcao != 0 ); // end do-while
         } catch ( Exception e ) {
             e.printStackTrace();
-        } // end try
+        } // end try-catch
     } // end menu ( )
 
-    public void incluirCategoria( ) 
+    protected static void opcoes_menu( )
+    {
+        System.out.println("\nAEDs-III 1.0           ");
+        System.out.println("-------------------------");
+        System.out.println("> Início > Categorias    ");
+        System.out.println("1 - Buscar               ");
+        System.out.println("2 - Incluir              ");
+        System.out.println("3 - Alterar              ");
+        System.out.println("4 - Excluir              ");
+        System.out.println("0 - Voltar               ");
+        System.out.print  ("Opção: "                  );
+    } // end opcoes_menu ( )
+
+    protected static void executar_opcao( int opcao )
+    {
+        switch( opcao ) 
+        {
+            case 0:
+                break;
+            case 1:
+                buscarCategoria( );
+                break;
+            case 2:
+                incluirCategoria( );
+                break;
+            case 3:
+                alterarCategoria( );
+                break;
+            case 4:
+                excluirCategoria( );
+                break;
+            
+            default:
+                System.out.println( RED + "Opção inválida!" + RESET );
+                break;
+        } // end switch
+    } // end executar_opcao ( )
+
+    public static void incluirCategoria( ) 
     {
         String  nome = "";
         boolean dadosCompletos = false;
@@ -81,40 +85,40 @@ public class MenuCategorias
             } // end if
         } while( dadosCompletos == false ); // end do-while
 
-        if( nome.length( ) == 0 ) {
-            return;
+        if( nome.length( ) > 0 ) 
+        {
+            System.out.println( "Confirma a inclusão da categoria? (S/N)" );
+            char resp = console.nextLine().charAt(0);
+            if( resp=='S' || resp=='s' ) 
+            {
+                try 
+                {
+                    Categoria c = new Categoria(nome);
+                    arqCategorias.create(c);
+                    System.out.println( GREEN + "Categoria criada com sucesso." + RESET);
+                } catch(Exception e) {
+                    System.out.println(RED + "Erro do sistema. Não foi possível criar a categoria!" + RESET);
+                } // end try
+            } // end if
         } // end if
 
-        System.out.println( "Confirma a inclusão da categoria? (S/N) " );
-        char resp = console.nextLine().charAt(0);
-        if( resp=='S' || resp=='s' ) 
-        {
-            try 
-            {
-                Categoria c = new Categoria(nome);
-                arqCategorias.create(c);
-                System.out.println("Categoria criada com sucesso.");
-            } catch(Exception e) {
-                System.out.println("Erro do sistema. Não foi possível criar a categoria!");
-            } // end try
-        } // end if
     } // end incluirCategoria ( )
 
-    public boolean buscarCategoria( )
+    public static boolean buscarCategoria( )
     {
         boolean result = false;
         System.out.println( "\nBuscar categoria:" );
         return result;
     } // end buscarCategoria ( )
 
-    public boolean alterarCategoria( )
+    public static boolean alterarCategoria( )
     {
         boolean result = false;
         System.out.println( "\nAlterar categoria:" );
         return result;
     } // end alterarCategoria ( )
 
-    public boolean excluirCategoria( )
+    public static boolean excluirCategoria( )
     {
         boolean result = false;
         System.out.println( "\nExcluir categoria:" );

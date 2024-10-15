@@ -49,8 +49,8 @@ public class Categoria implements Registro
 
     public String toString ( ) 
     {
-        return ("\nID...............: " + this.id   +
-                "\nNome.............: " + this.nome);
+        return ("\nID..: " + this.id   +
+                "\nNome: " + this.nome);
     } // end toString ( )
 
     public byte[] toByteArray ( ) throws IOException 
