@@ -9,34 +9,34 @@ import java.io.IOException;
 import interfaces.RegistroHashExtensivel;
 
 /**
- *  ParIDEndereco: Classe que representa um par de ID e Endereco.
+ *  ParIDCategoriaNome: Classe que representa um par de ID Categoria e Nome.
  *  Implementa a interface RegistroHashExtensivel.
  */
-public class ParIDEndereco implements RegistroHashExtensivel<ParIDEndereco> 
+public class ParIDCategoriaNome implements RegistroHashExtensivel<ParIDCategoriaNome> 
 {
     private int id;
-    private long endereco;
+    private String nome;
     private final short TAMANHO = 12; // tamanho em bytes
 
-    public ParIDEndereco ( ) 
+    public ParIDCategoriaNome ( ) 
     {
         this.id = -1;
-        this.endereco = -1;
-    } // end ParIDEndereco ( )
+        this.nome = "";
+    } // end ParIDCategoriaNome ( )
 
-    public ParIDEndereco ( int id, long end ) 
+    public ParIDCategoriaNome ( int id, String end ) 
     {
         this.id = id;
-        this.endereco = end;
-    } // end ParIDEndereco ( )
+        this.nome = end;
+    } // end ParIDCategoriaNome ( )
 
     public int getId ( ) {
         return id;
     } // end getId ( )
 
-    public long getEndereco ( ) {
-        return endereco;
-    } // end getEndereco ( )
+    public String getNome ( ) {
+        return nome;
+    } // end getNome ( )
 
     @Override
     public int hashCode ( ) {
@@ -48,7 +48,7 @@ public class ParIDEndereco implements RegistroHashExtensivel<ParIDEndereco>
     } // end size ( )
 
     public String toString ( ) {
-        return "(" + this.id + ";" + this.endereco + ")";
+        return "(" + this.id + ";" + this.nome + ")";
     } // end toString ( )
 
     public byte[] toByteArray ( ) throws IOException 
@@ -57,7 +57,7 @@ public class ParIDEndereco implements RegistroHashExtensivel<ParIDEndereco>
         DataOutputStream dos = new DataOutputStream(baos);
 
         dos.writeInt(this.id);
-        dos.writeLong(this.endereco);
+        dos.writeBytes(this.nome);
         
         return ( baos.toByteArray() );
     } // end toByteArray ( )
@@ -68,7 +68,9 @@ public class ParIDEndereco implements RegistroHashExtensivel<ParIDEndereco>
         DataInputStream dis = new DataInputStream(bais);
     
         this.id = dis.readInt();
-        this.endereco = dis.readLong();
+        byte[] b = new byte[dis.available()];
+        dis.read(b);
+        this.nome = new String(b);
     } // end fromByteArray ( )
     
-} // end class ParIDEndereco
+} // end class ParIDCategoriaNome
