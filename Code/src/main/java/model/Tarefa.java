@@ -19,12 +19,14 @@ public class Tarefa implements Registro {
     private LocalDate dataConclusao;
     private byte      status;
     private byte      prioridade;
+    private int       idCategoria;
 
     public Tarefa ( ) {
         this(-1, "", LocalDate.now(), LocalDate.now(), (byte) -1, (byte) -1);
     } // end Tarefa ( )
 
-    public Tarefa ( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) {
+    public Tarefa ( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) 
+    {
         this.nome          = nome;
         this.dataCriacao   = dataCriacao;
         this.dataConclusao = dataConclusao;
@@ -32,7 +34,8 @@ public class Tarefa implements Registro {
         this.prioridade    = prioridade;
     } // end Tarefa ( )
 
-    public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) {
+    public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade )
+    {
         this.id            = id;
         this.nome          = nome;
         this.dataCriacao   = dataCriacao;
@@ -89,16 +92,28 @@ public class Tarefa implements Registro {
         this.prioridade = prioridade;
     } // end setPrioridade ( )
 
-    public String toString ( ) {
-        return  "\nID...............: " + this.id            +
+    public int getIdCategoria ( ) {
+        return this.idCategoria;
+    } // end getIdCategoria ( )
+
+    public void setIdCategoria ( int idCategoria ) {
+        this.idCategoria = idCategoria;
+    } // end setIdCategoria ( )
+
+    public String toString ( ) 
+    {
+        return ("\nID...............: " + this.id            +
                 "\nNome.............: " + this.nome          +
                 "\nData de Criacao..: " + this.dataCriacao   +
                 "\nData de Conclusao: " + this.dataConclusao +
                 "\nStatus...........: " + this.status        +
-                "\nPrioridade.......: " + this.prioridade;
+                "\nPrioridade.......: " + this.prioridade    +
+                "\nCategoria........: " + this.idCategoria
+                );
     } // end toString ( )
 
-    public byte[] toByteArray ( ) throws IOException {
+    public byte[] toByteArray ( ) throws IOException 
+    {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
@@ -108,11 +123,13 @@ public class Tarefa implements Registro {
         dos.writeInt ((int)this.dataConclusao.toEpochDay()); // data de conclusão
         dos.writeByte(this.status); // status
         dos.writeByte(this.prioridade); // prioridade
+        dos.writeInt(this.idCategoria); // idCategoria
 
         return baos.toByteArray();
     } // end toByteArray ( )
 
-    public void fromByteArray ( byte[] b ) throws IOException {
+    public void fromByteArray ( byte[] b ) throws IOException 
+    {
         ByteArrayInputStream bais = new ByteArrayInputStream(b);
         DataInputStream dis = new DataInputStream(bais);
 
@@ -122,6 +139,7 @@ public class Tarefa implements Registro {
         this.dataConclusao = LocalDate.ofEpochDay(dis.readInt());
         this.status        = dis.readByte();
         this.prioridade    = dis.readByte();
+        this.idCategoria   = dis.readInt();
     } // end fromByteArray ( )
 
 } // end class Tarefa
