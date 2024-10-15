@@ -12,7 +12,8 @@ import interfaces.Registro;
 /**
  *  Tarefa: Classe que representa uma tarefa a ser realizada.
  */
-public class Tarefa implements Registro {
+public class Tarefa implements Registro 
+{
     private int       id;
     private String    nome;
     private LocalDate dataCriacao;
