@@ -1,5 +1,7 @@
 package service;
 
+import java.util.ArrayList;
+
 import model.Categoria;
 
 /**
@@ -8,65 +10,64 @@ import model.Categoria;
 public class ArquivoCategoria extends Arquivo<Categoria>
 {
     Arquivo<Categoria> arqTarefa;
-    HashExtensivel<ParIDCategoriaNome> indiceIndiretoNome;
+    ArvoreBMais<ParIDCategoriaNome> indiceIndiretoNome;
 
     public ArquivoCategoria ( ) throws Exception 
     {
-        super( "categorias", Categoria.class.getConstructor() );
-        indiceIndiretoNome = new HashExtensivel<>
-        (
-            ParIDCategoriaNome.class.getConstructor(), 
-            4, 
-            ".\\Codigo\\src\\main\\data\\indiceNome.hash_d.db", 
-            ".\\Codigo\\src\\main\\data\\indiceNome.hash_c.db"
+        super( "Categorias.db", Categoria.class.getConstructor() );
+        indiceIndiretoNome = new ArvoreBMais<>
+        ( 
+            ParIDCategoriaNome.class.getConstructor(),
+            5, 
+            ".\\Code\\src\\main\\data\\indiceIndiretoNome.bptree.db" 
         );
     } // end ArquivoCategoria ( )
 
-    /*  @Override
-    public int create ( Categoria t ) throws Exception 
+    @Override
+    public int create ( Categoria obj ) throws Exception 
     {
-        int id = super.create(t);
-        indiceIndiretoNome.create(new ParIDCategoriaNome(t.getNome(), id));
+        int id = super.create(obj);
+        indiceIndiretoNome.create( new ParIDCategoriaNome(id, obj.getNome()) );
         return id;
     } // end create ( )
 
     public Categoria read ( String nome ) throws Exception 
     {
-        ParIDCategoriaNome picit = indiceIndiretoNome.read(ParIDCategoriaNome.hash(nome));
-        if( picit == null ) {
-            return null;
-        } // end if
-        return read(picit.getIDTarefa());
+        ArrayList<ParIDCategoriaNome> picn = indiceIndiretoNome.read( new ParIDCategoriaNome(-1, nome) );
+        return super.read(picn.get(0).getIDCategoria());
+        
     } // end read ( )
     
     public boolean delete ( int nome ) throws Exception 
     {
         boolean result = false;
-        ParIDCategoriaNome picit = indiceIndiretoNome.read(ParIDCategoriaNome.hash(nome));
-        if( picit != null ) 
+        Categoria obj = super.read(nome);
+        if( obj != null ) 
         {
-            if( delete(picit.getIDTarefa()) ) {
-                result = indiceIndiretoNome.delete(ParIDCategoriaNome.hash(nome));
+            if( indiceIndiretoNome.delete( new ParIDCategoriaNome(obj.getId(), obj.getNome()) ) ) {
+                result = super.delete(obj.getId());
             } // end if
         } // end if
         return result;
     } // end delete ( )
 
     @Override
-    public boolean update ( Categoria novaTarefa ) throws Exception 
+    public boolean update ( Categoria novaCategoria ) throws Exception 
     {
         boolean result = false;
-        Categoria tarefaAntiga = read( novaTarefa.getIdCategoria() );
-        if( super.update(novaTarefa) ) 
+        Categoria categoriaAntiga = super.read( novaCategoria.getId() );
+        if( super.update(novaCategoria) ) 
         {
-            if( novaTarefa.getIdCategoria() != tarefaAntiga.getIdCategoria() ) 
+            if( novaCategoria.getNome() != categoriaAntiga.getNome() ) 
             {
-                indiceIndiretoNome.delete(ParIDCategoriaNome.hash(tarefaAntiga.getIdCategoria()));
-                indiceIndiretoNome.create(new ParIDCategoriaNome(novaTarefa.getIdCategoria(), novaTarefa.getId()));
+                if( indiceIndiretoNome.delete( new ParIDCategoriaNome(novaCategoria.getId(), categoriaAntiga.getNome()) ) ) 
+                {
+                    indiceIndiretoNome.create( new ParIDCategoriaNome(novaCategoria.getId(), novaCategoria.getNome()) );
+                } // end if
+                result = true;
             } // end if
-            result = true;
         } // end if
         return result;
     } // end update ( )
- */
+
 } // end class ArquivoCategoria
