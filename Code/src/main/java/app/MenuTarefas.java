@@ -90,36 +90,39 @@ public class MenuTarefas extends IO
 
     private static void listar_status( )
     {
-        System.out.println( "\nStatus:"        );
-        System.out.println( "1 - Pendente"     );
-        System.out.println( "2 - Em Andamento" );
-        System.out.println( "3 - Concluída"    );
-        System.out.println( "4 - Cancelada"    );
-        System.out.println( "5 - Atrasada"     );
-        System.out.print  ("Opção: "           );
+        System.out.println( "\nEscolha um status:" );
+        System.out.println( "1 - Pendente        " );
+        System.out.println( "2 - Em Andamento    " );
+        System.out.println( "3 - Concluída       " );
+        System.out.println( "4 - Cancelada       " );
+        System.out.println( "5 - Atrasada        " );
+        System.out.print  ( "Status: "             );
     } // end listar_status ( )
 
     private static void listar_prioridades( )
     {
-        System.out.println( "\nPrioridades:" );
-        System.out.println( "0 - Muito Baixa");
-        System.out.println( "1 - Baixa"     );
-        System.out.println( "2 - Média"     );
-        System.out.println( "3 - Alta"      );
-        System.out.println( "4 - Urgente"   );
-        System.out.print  ("Opção: "        );
+        System.out.println( "\nEscolha uma prioridade:" );
+        System.out.println( "0 - Muito Baixa          " );
+        System.out.println( "1 - Baixa                " );
+        System.out.println( "2 - Média                " );
+        System.out.println( "3 - Alta                 " );
+        System.out.println( "4 - Urgente              " );
+        System.out.print  ( "Opção: "                   );
     } // end listar_prioridades ( )
 
     private static void listar_categorias( )
     {
         System.out.println( "\nCategorias:" );
         /* FAZER UM METODO PARA LER DO 'arqCategoria' E QUE RETORNA TODAS AS CATEGORIAS EXISTENTES */
-        /* System.out.println( "1 - Trabalho"  );
+
+        /* 
+        System.out.println( "1 - Trabalho"  );
         System.out.println( "2 - Estudo"    );
         System.out.println( "3 - Lazer"     );
         System.out.println( "4 - Saúde"     );
         System.out.println( "5 - Outros"    );
-        System.out.print  ("Opção: "        ); */
+        System.out.print  ("Opção: "        ); 
+        */
     } // end listar_categorias ( )
 
     public static Tarefa ler_Tarefa ( )
@@ -144,7 +147,7 @@ public class MenuTarefas extends IO
             listar_prioridades( );
             byte prioridade = Byte.parseByte( console.nextLine( ) );
 
-            // listar_categorias( );
+            listar_categorias( );
             int idCategoria = Integer.parseInt( console.nextLine( ) );
 
             tarefa = new Tarefa( nome, dataCriacao, dataConclusao, status, prioridade, idCategoria );
@@ -164,18 +167,21 @@ public class MenuTarefas extends IO
             if ( novaTarefa != null ) 
             {
                 System.out.println( "\nConfirma inclusão da tarefa? (S/N)" );
-                String confirmacao = console.nextLine( );
-
-                if( confirmacao.equalsIgnoreCase( "S" ) ) 
+                char resp = console.nextLine().charAt(0);
+                if( resp == 'S' || resp == 's' ) 
                 {
-                    arqTarefas.create( novaTarefa );
-                    System.out.println( GREEN + "Tarefa incluída com sucesso!" + RESET );
+                    try 
+                    {
+                        arqTarefas.create( novaTarefa );
+                        System.out.println( GREEN + "Tarefa incluída com sucesso!" + RESET );
+                    } catch( Exception e ) {
+                        System.out.println(RED + "Erro do sistema. Não foi possível criar a tarefa!" + RESET);
+                    } // end try-catch
                 } else {
                     System.out.println( RED + "Inclusão cancelada!" + RESET );
                 } // end if
             }// end if
-            
-        } catch ( Exception e ) {
+        } catch( Exception e ) {
             System.out.println( RED + "Erro ao incluir tarefa!" + RESET );
         } // end try-catch
     } // end incluirTarefa ( )
