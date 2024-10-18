@@ -1,5 +1,7 @@
 package app;
 
+import java.util.ArrayList;
+
 import model.Categoria;
 import service.ArquivoCategoria;
 
@@ -78,17 +80,20 @@ public class MenuCategorias extends IO
         {
             System.out.print("\nNome da categoria (min. de 5 letras): ");
             nome = console.nextLine( );
+
             if( nome.length( ) >= 5 || nome.length( ) == 0 ) {
                 dadosCompletos = true;
             } else {
                 System.err.println("O nome da categoria deve ter no mínimo 5 caracteres.");
             } // end if
+
         } while( dadosCompletos == false ); // end do-while
 
         if( nome.length( ) > 0 ) 
         {
             System.out.println( "Confirma a inclusão da categoria? (S/N)" );
             char resp = console.nextLine().charAt(0);
+
             if( resp=='S' || resp=='s' ) 
             {
                 try 
@@ -115,14 +120,14 @@ public class MenuCategorias extends IO
     {
         boolean result = false;
         System.out.println( "\nAlterar categoria:" );
-        return result;
+        return ( result );
     } // end alterarCategoria ( )
 
     public static boolean excluirCategoria( )
     {
         boolean result = false;
         System.out.println( "\nExcluir categoria:" );
-        return result;
+        return ( result );
     } // end excluirCategoria ( )
 
 } // end class MenuCategorias

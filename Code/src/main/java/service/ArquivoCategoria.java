@@ -36,7 +36,38 @@ public class ArquivoCategoria extends Arquivo<Categoria>
         ArrayList<ParNomeIDCategoria> picn = indiceIndiretoNome.read( new ParNomeIDCategoria(nome, -1) );
         return super.read(picn.get(0).getIDCategoria());
     } // end read ( )
-    
+
+    public ArrayList<Categoria> readAll( ) throws Exception 
+    {
+        arquivo.seek(TAM_CABECALHO);
+        byte lapide;
+        short tam;
+        byte[] b;
+
+        Categoria c;
+        ArrayList<Categoria> categorias = new ArrayList<>();
+
+        // Lê até o final do arquivo
+        while( arquivo.getFilePointer() < arquivo.length() ) 
+        {
+            lapide = arquivo.readByte();
+            tam = arquivo.readShort();
+            b = new byte[tam];
+            arquivo.read(b);
+
+            if( lapide != '*' ) 
+            {
+                c = new Categoria();
+                c.fromByteArray(b);
+                categorias.add(c);
+            } // end if
+        } // end while
+
+        // Collections.sort(Comparator.comparing(Categoria::getNome));
+
+        return ( categorias );  
+    } // end readAll ( )
+
     public boolean delete ( int nome ) throws Exception 
     {
         boolean result = false;
