@@ -53,22 +53,28 @@ public class IO
 
     protected static void executar_opcao( int opcao ) throws Exception
     {
-        switch( opcao ) 
-        {
-            case 0:
-                System.out.println("Saindo...");
-                break;
-            case 1:
-                (new MenuCategorias( )).menu( );
-                break;
-            case 2:
-                (new MenuTarefas()).menu();
-                break;
-            
-            default:
-                System.out.println( RED + "Opção inválida!" + RESET );
-                break;
-        } // end switch
+        try {
+            MenuCategorias menuC = new MenuCategorias();
+            MenuTarefas menuT = new MenuTarefas();
+            switch( opcao ) 
+            {
+                case 0:
+                    System.out.println("Saindo...");
+                    break;
+                case 1:
+                    menuC.menu( );
+                    break;
+                case 2:
+                    menuT.menu();
+                    break;
+                
+                default:
+                    System.out.println( RED + "Opção inválida!" + RESET );
+                    break;
+            } // end switch
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     } // end executar_opcao ( )
 
 } // end class IO

@@ -190,6 +190,21 @@ public class MenuTarefas extends IO
     {
         boolean result = false;
         System.out.println( "\nBuscar Tarefa:" );
+        System.out.print("ID: ");
+        int id = Integer.parseInt(console.nextLine());
+        // teste para saber se o ID e valido
+        if (id < 0 ) {
+            System.out.println("ID nao valido!");
+            return result;
+        }   
+        try {
+            Tarefa tarefa = arqTarefas.read(id);
+            if (tarefa != null) {
+                System.out.println(tarefa);
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar: " + e.getMessage());
+        }
         return result;
     } // end buscarTarefa ( )
 
