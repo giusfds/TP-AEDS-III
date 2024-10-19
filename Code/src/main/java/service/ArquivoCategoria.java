@@ -1,6 +1,8 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 
 import model.Categoria;
 
@@ -19,20 +21,21 @@ public class ArquivoCategoria extends Arquivo<Categoria>
         ( 
             ParNomeIDCategoria.class.getConstructor(),
             5, 
-            ".\\Code\\src\\main\\data\\indiceIndiretoNome.bptree.db" 
+            ".\\Code\\src\\main\\data\\Categorias.db.bpt.idx" 
         );
     } // end ArquivoCategoria ( )
 
-
-    public ArrayList<Categoria> readAll( ) throws Exception 
+    public List<Categoria> readAll( ) throws Exception 
     {
-        arquivo.seek(TAM_CABECALHO);
-        byte lapide;
-        short tam;
-        byte[] b;
+        List<Categoria> categorias = null;
 
-        Categoria c;
-        ArrayList<Categoria> categorias = new ArrayList<>();
+        arquivo.seek( TAM_CABECALHO );
+        byte lapide = ' ';
+        short tam = 0;
+        byte[] b = null;
+
+        Categoria c = null;
+        categorias = new ArrayList<>( );
 
         // Lê até o final do arquivo
         while( arquivo.getFilePointer() < arquivo.length() ) 
@@ -50,7 +53,7 @@ public class ArquivoCategoria extends Arquivo<Categoria>
             } // end if
         } // end while
 
-        // Collections.sort(Comparator.comparing(Categoria::getNome));
+        Collections.sort( categorias );
 
         return ( categorias );  
     } // end readAll ( )
