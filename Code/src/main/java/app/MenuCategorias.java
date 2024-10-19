@@ -74,6 +74,7 @@ public class MenuCategorias extends IO
     {
         if( lista != null ) 
         {
+            System.out.println( "\nLista de categorias:" );
             int tam = lista.size( );
             for( int i = 0; i < tam; i++ ) {
                 System.out.println( (i+1) + ": " + lista.get(i).getNome() );
@@ -102,7 +103,7 @@ public class MenuCategorias extends IO
 
     public static void incluirCategoria( ) 
     {
-        System.out.println( "\nIncluir categoria:" );
+        System.out.println( "\n> Incluir categoria:" );
         
         Categoria novaCategoria = ler_Categoria( );
 
@@ -128,18 +129,17 @@ public class MenuCategorias extends IO
 
     public static void buscarCategoria( ) 
     {
-        System.out.println( "\nBuscar Categoria:" );
+        System.out.println( "\n> Buscar Categoria:" );
         
         try 
         {
             List<Categoria> lista = arqCategorias.readAll( );
 
-            if( lista == null ) {
+            if( lista.isEmpty( ) ) {
                 System.out.println( RED + "Não há categoria cadastrada." + RESET );
             } 
             else 
             {
-                System.out.println( "\nLista de categorias:" );
                 listarCategorias( lista );
 
                 System.out.print( "Nome da Categoria: " );
@@ -160,7 +160,7 @@ public class MenuCategorias extends IO
                     } // end for
         
                     if( categoriaEncontrada != null ) {
-                        System.out.println( categoriaEncontrada );
+                        System.out.println( GREEN + categoriaEncontrada + RESET );
                     } else {
                         System.out.println( RED + "Categoria não encontrada." + RESET );
                     }//end if
@@ -176,13 +176,13 @@ public class MenuCategorias extends IO
 
     public static void alterarCategoria( ) 
     {
-        System.out.println( "\nAlterar Categoria:" );
+        System.out.println( "\n> Alterar Categoria:" );
     
         try 
         {
             List<Categoria> lista = arqCategorias.readAll( );
 
-            if( lista == null ) {
+            if( lista.isEmpty( ) ) {
                 System.out.println( RED + "Não há categoria cadastrada." + RESET );
             } 
             else
@@ -190,7 +190,7 @@ public class MenuCategorias extends IO
                 System.out.println( "\nLista de categorias:" );
                 listarCategorias( lista );
 
-                System.out.print( "Novo nome da Categoria: " );
+                System.out.print( "Nome da Categoria: " );
                 String nome = console.nextLine(); 
 
                 if( nome.length() > 0 ) 
@@ -234,13 +234,13 @@ public class MenuCategorias extends IO
     
     public static void excluirCategoria( ) 
     {
-        System.out.println( "\nExcluir Categoria:" );
+        System.out.println( "\n> Excluir Categoria:" );
 
         try 
         {
             List<Categoria> lista = arqCategorias.readAll( );
 
-            if( lista == null ) {
+            if( lista.isEmpty( ) ) {
                 System.out.println( RED + "Não há categoria cadastrada." + RESET );
             } 
             else
@@ -267,7 +267,7 @@ public class MenuCategorias extends IO
         
                     if( categoriaEncontrada != null ) 
                     {
-                        System.out.println( "Categoria:" );
+                        System.out.print  ( "\nCategoria:" );
                         System.out.println( categoriaEncontrada );
 
                         System.out.println("\nConfirma a exclusão da categoria? (S/N)");

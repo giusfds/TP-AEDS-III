@@ -27,7 +27,7 @@ public class ArquivoCategoria extends Arquivo<Categoria>
 
     public List<Categoria> readAll( ) throws Exception 
     {
-        List<Categoria> categorias = null;
+        List<Categoria> categorias = new ArrayList<>( );
 
         arquivo.seek( TAM_CABECALHO );
         byte lapide = ' ';
@@ -35,7 +35,6 @@ public class ArquivoCategoria extends Arquivo<Categoria>
         byte[] b = null;
 
         Categoria c = null;
-        categorias = new ArrayList<>( );
 
         // Lê até o final do arquivo
         while( arquivo.getFilePointer() < arquivo.length() ) 
