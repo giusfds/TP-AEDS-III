@@ -54,6 +54,8 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
             pnic = new ParNomeIDCategoria(this.nome, this.idCategoria);
         } // end try
         catch ( Exception e ) {
+            pnic = null;
+            e.printStackTrace();
         } // end catch
         return pnic;
     } // end clone ( )
