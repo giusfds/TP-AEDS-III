@@ -1,97 +1,101 @@
-# Trabalho Pratico AEDs 3
+# Trabalho Prático AEDs 3 - Parte 2
 
 ## Descrição
 
-Este projeto tem como objetivo a implementação de um CRUD (Create, Read, Update, Delete) genérico em Java, capaz de manipular entidades armazenadas em arquivos. O foco inicial do projeto é gerenciar tarefas, incluindo operações como inclusão, leitura, atualização e exclusão de registros.
+Este trabalho é a continuação do desenvolvimento de um sistema CRUD (Create, Read, Update, Delete) genérico, agora com a implementação de índices indiretos e um relacionamento 1:N. A extensão do CRUD foi aplicada a uma entidade específica, deixando de ser genérico. Focamos na implementação de um relacionamento entre duas entidades: **Tarefa** e **Categoria**.
 
-Cada tarefa possui os seguintes atributos:
+Cada tarefa pertence a uma categoria, e nosso sistema agora oferece suporte para buscar tarefas por categoria, assegurando a integridade das operações ao gerenciar a vinculação entre elas.
 
-- **Nome**: Descrição da tarefa.
-- **Data de Criação**: Data em que a tarefa foi criada.
-- **Data de Conclusão**: Data em que a tarefa foi concluída.
-- **Status**: Estado atual da tarefa (Pendente, Em Progresso, Concluída, etc.).
-- **Prioridade**: Nível de prioridade da tarefa.
+## Estrutura Estendida
 
-## Estrutura do Registro
+### Índice Indireto
 
-Os registros no arquivo são compostos por três partes:
+O índice indireto foi implementado para a entidade **Categoria**, permitindo a busca de categorias não apenas por ID, mas também pelo nome. Utilizamos uma tabela Hash Extensível para gerenciar este índice indireto, sendo que a classe `ParNomeId` foi criada para armazenar o par (Nome, ID). Esse índice facilita operações como a busca e a verificação da existência de uma categoria pelo nome.
 
-1. **Lápide**: Byte que indica se o registro é válido ou foi excluído.
-2. **Indicador de Tamanho**: Número inteiro que indica o tamanho do registro em bytes.
-3. **Vetor de Bytes**: Dados da entidade convertidos em bytes.
+### Relacionamento 1:N
 
-### Operações Implementadas
+O relacionamento 1:N entre categorias e tarefas foi implementado de modo que cada tarefa possui uma **chave estrangeira** representando o **ID da categoria** à qual pertence. Utilizamos uma **Árvore B+** para manter esse relacionamento e assegurar que seja possível recuperar todas as tarefas de uma determinada categoria.
 
-As operações de CRUD são realizadas por uma classe genérica `Arquivo<T>` que pode manipular qualquer entidade que implemente a interface `Registro`. A interface `Registro` define os métodos necessários para que uma entidade possa ser armazenada e manipulada no arquivo.
-
-### Índice Direto
-
-O projeto utiliza um índice direto baseado em tabela hash extensível para gerenciar os registros. Este índice armazena a chave primária (ID) e o endereço do registro, facilitando as operações de busca, inserção, atualização e exclusão.
+Além disso, a árvore B+ também foi usada para impedir a exclusão de uma categoria que ainda possui tarefas vinculadas, mantendo assim a integridade dos dados.
 
 ## Estrutura do Projeto
 
-### Classes Principais
+### Classes Criadas
 
-- Arquivo`<T extends Registro>`: Classe genérica que gerencia as operações de CRUD no arquivo de dados.
-- Tarefa: Classe que representa a entidade Tarefa, implementando a interface Registro.
-- Teste: Classe principal que realiza testes das operações CRUD utilizando a entidade Tarefa.
+1. **ArquivoTarefas**: Estende a classe `Arquivo<T>` e gerencia as operações de CRUD para a entidade Tarefa. Implementa o relacionamento 1:N com categorias, utilizando a Árvore B+.
+   
+2. **ArquivoCategorias**: Estende a classe `Arquivo<Categoria>` e inclui o índice indireto por nome de categoria, utilizando a Árvore B+. Implementa também a verificação de dependências ao tentar excluir uma categoria com tarefas vinculadas.
 
-### Métodos Principais
+3. **ParNomeIDCategoria**: Representa o par (Nome, ID) para o índice indireto de categorias.
 
-- create(T objeto): Insere um novo registro no arquivo e retorna o ID gerado.
-- read(int id): Lê um registro do arquivo com base no ID e retorna o objeto correspondente.
-- update(T objeto): Atualiza um registro existente no arquivo com base no ID do objeto.
-- delete(int id): Marca um registro como excluído no arquivo.
+4. **ParIdCategoriaIdTarefa**: Representa o par (ID de Categoria, ID de Tarefa) para o relacionamento 1:N na Árvore B+.
+
+5. **MenuTarefas e MenuCategorias**: Responsáveis pela interação com o usuário, apresentando menus, capturando entradas e exibindo resultados, além disso também controlam a lógica das operações de CRUD e as interações entre arquivos, visões e o sistema de armazenamento.
+
+### Relatório de Operações
+
+- **Buscar**: Implementa a busca utilizando a árvore.
+- **Incluir**: Permite adicionar uma nova categoria ou tarefa, com suas respectivas validações.
+- **Alterar**: Permite atualizar uma tarefa ou categoria existente.
+- **Excluir**: Realiza verificações antes de permitir a exclusão.
 
 ## Experiência de Desenvolvimento
 
-Durante o desenvolvimento do projeto, implementamos todas as funcionalidades básicas necessárias para o CRUD de tarefas. 
-A primeira etapa envolveu a implementação conjunta da classe Tarefa, seguida pela atribuição das funções do CRUD à classe 
-Arquivo para cada membro da equipe.
+Implementamos todos os requisitos para estender o CRUD, criando tanto o índice indireto quanto o relacionamento 1:N. O maior desafio foi compreender e integrar a Árvore B+ para gerenciar o relacionamento entre categorias e tarefas. Apesar disso, a experiência foi enriquecedora, especialmente ao ver como estruturas de dados como tabelas hash extensíveis e árvores B+ se comportam em um cenário prático.
 
-Conseguimos integrar a classe HashExtensivel sem problemas. A principal dificuldade foi entender o funcionamento global do
-sistema, mas uma vez que esse entendimento foi alcançado, o restante do trabalho fluiu de maneira tranquila.
-
-Além de atender aos requisitos da disciplina, o projeto também proporcionou um aprofundamento significativo no uso do Git,
-devido à estrutura de gerenciamento de branches que adotamos. Essa experiência foi valiosa, pois nos permitiu aplicar 
-conceitos teóricos em um contexto prático e desenvolver habilidades importantes tanto na programação quanto na colaboração 
-em equipe.
+A integração entre os Menus e os Arquivos seguiu o padrão MVC, o que facilitou a organização do código e a manutenção.
 
 ## Checklist
 
-- O trabalho possui um índice direto implementado com a tabela hash extensível?
-   ````
+- O CRUD (com índice direto) de categorias foi implementado?  
+   ```
    SIM
-   ````
-- A operação de inclusão insere um novo registro no fim do arquivo e no índice e retorna o ID desse registro?
-   ````
+   ```
+   
+- Há um índice indireto de nomes para as categorias?  
+   ```
    SIM
-   ````
-
-- A operação de busca retorna os dados do registro, após localizá-lo por meio do índice direto?
-   ````
+   ```
+   
+- O atributo de ID de categoria, como chave estrangeira, foi criado na classe Tarefa?  
+   ```
    SIM
-   ````
-- A operação de alteração altera os dados do registro e trata corretamente as reduções e aumentos no espaço do registro?
-   ````
+   ```
+   
+- Há uma árvore B+ que registre o relacionamento 1:N entre tarefas e categorias?  
+   ```
    SIM
-   ````
-- A operação de exclusão marca o registro como excluído e o remove do índice direto?
-   ````
+   ```
+    
+- É possível listar as tarefas de uma categoria?  
+   ```
    SIM
-   ````
-- O trabalho está funcionando corretamente?
-   ````
+   ```
+    
+- A remoção de categorias checa se há alguma tarefa vinculada a ela?  
+   ```
    SIM
-   ````
-- O trabalho está completo?
-   ````
+   ```
+    
+- A inclusão da categoria em uma tarefa se limita às categorias existentes?  
+   ```
    SIM
-   ````
-- O trabalho é original e não a cópia de um trabalho de outro grupo?
-   ````
+   ```
+    
+- O trabalho está funcionando corretamente?  
+   ```
    SIM
-   ````
+   ```
+    
+- O trabalho está completo?  
+   ```
+   SIM
+   ```
+   
+- O trabalho é original e não a cópia de um trabalho de outro grupo?  
+   ```
+   SIM
+   ```
 
 ## Integrantes
 
