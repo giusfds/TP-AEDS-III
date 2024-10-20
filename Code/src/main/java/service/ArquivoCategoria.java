@@ -12,12 +12,12 @@ import model.Categoria;
 public class ArquivoCategoria extends Arquivo<Categoria>
 {
     Arquivo<Categoria> arqTarefa;
-    ArvoreBMais<ParNomeIDCategoria> indiceIndiretoNome;
+    ArvoreBMais<ParNomeIDCategoria> arvore;
 
     public ArquivoCategoria ( ) throws Exception 
     {
         super( "Categorias.db", Categoria.class.getConstructor() );
-        indiceIndiretoNome = new ArvoreBMais<>
+        arvore = new ArvoreBMais<>
         ( 
             ParNomeIDCategoria.class.getConstructor(),
             5, 
@@ -52,7 +52,7 @@ public class ArquivoCategoria extends Arquivo<Categoria>
             } // end if
         } // end while
 
-        Collections.sort( categorias );
+        // Collections.sort( categorias );
 
         return ( categorias );  
     } // end readAll ( )
