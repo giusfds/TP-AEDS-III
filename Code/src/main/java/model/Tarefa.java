@@ -111,14 +111,45 @@ public class Tarefa implements Registro
         this.idCategoria = idCategoria;
     } // end setIdCategoria ( )
 
+    private static String getStatusString ( byte status ) 
+    {
+        switch( status ) 
+        {
+            case 1 : return "Pendente"       ;
+            case 2 : return "Em andamento"   ;
+            case 3 : return "Concluída"      ;
+            case 4 : return "Cancelada"      ;
+            case 5 : return "Atrasada"       ;
+            default: return "Status inválido";
+        } // end switch
+    } // end getStatusString ( )
+
+    private static String getPrioridadeString ( byte prioridade ) 
+    {
+        switch( prioridade ) 
+        {
+            case 1 : return "Muito baixa"        ;
+            case 2 : return "Baixa"              ;
+            case 3 : return "Média"              ;
+            case 4 : return "Alta"               ;
+            case 5 : return "Urgente"            ;
+            default: return "Prioridade inválida";
+        } // end switch
+    } // end getPrioridadeString ( )
+
+    private static String getDataString ( LocalDate data ) 
+    {
+        return data.getDayOfMonth() + "/" + data.getMonthValue() + "/" + data.getYear();
+    } // end getDataString ( )
+
     public String toString ( ) 
     {
-        return ("\nID...............: " + this.id            +
-                "\nNome.............: " + this.nome          +
-                "\nData de Criacao..: " + this.dataCriacao   +
-                "\nData de Conclusao: " + this.dataConclusao +
-                "\nStatus...........: " + this.status        +
-                "\nPrioridade.......: " + this.prioridade    +
+        return ("\nID...............: " + this.id                                +
+                "\nNome.............: " + this.nome                              +
+                "\nData de Criacao..: " + getDataString( this.dataCriacao )      +
+                "\nData de Conclusao: " + getDataString( this.dataConclusao )    +
+                "\nStatus...........: " + getStatusString( this.status )         +
+                "\nPrioridade.......: " + getPrioridadeString( this.prioridade ) +
                 "\nCategoria........: " + this.idCategoria
                 );
     } // end toString ( )
@@ -134,7 +165,7 @@ public class Tarefa implements Registro
         dos.writeInt ((int)this.dataConclusao.toEpochDay()); // data de conclusão
         dos.writeByte(this.status); // status
         dos.writeByte(this.prioridade); // prioridade
-        dos.writeInt(this.idCategoria); // idCategoria
+        dos.writeInt (this.idCategoria); // idCategoria
 
         return baos.toByteArray();
     } // end toByteArray ( )
