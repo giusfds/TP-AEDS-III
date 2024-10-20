@@ -25,9 +25,9 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
         this( "", -1 );
     } // end ParNomeIDCategoria ( )
 
-    public ParNomeIDCategoria ( int idCategoria ) 
+    public ParNomeIDCategoria ( String nome ) 
     {
-        this( "", idCategoria );
+        this( nome, -1 );
     } // end ParNomeIDCategoria ( )
 
     public ParNomeIDCategoria ( String nome, int idCategoria ) 
@@ -54,6 +54,8 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
             pnic = new ParNomeIDCategoria(this.nome, this.idCategoria);
         } // end try
         catch ( Exception e ) {
+            pnic = null;
+            e.printStackTrace();
         } // end catch
         return pnic;
     } // end clone ( )
@@ -86,7 +88,7 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
         byte[] ba = new byte[28];
         byte[] baNome = this.nome.getBytes();
         int i = 0;
-        while( i < baNome.length ) {
+        while( i < baNome.length && i < ba.length ) {
             ba[i] = baNome[i];
             i++;
         } // end while

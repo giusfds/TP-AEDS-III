@@ -5,13 +5,15 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 
 import interfaces.Registro;
 
 /**
  *  Categoria: classe que representa uma categoria de tarefas.
  */
-public class Categoria implements Registro 
+public class Categoria implements Registro, Comparable<Categoria>
 {
     private int       id;
     private String    nome;
@@ -72,5 +74,17 @@ public class Categoria implements Registro
         this.id   = dis.readInt();
         this.nome = dis.readUTF();
     } // end fromByteArray ( )
+
+    private static String strnormalize ( String str ) 
+    {
+        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("").toLowerCase();
+    } // end transforma ( )
+
+    @Override
+    public int compareTo( Categoria outra ) {
+        return strnormalize(this.nome).compareTo( strnormalize(outra.nome) );
+    } // end compareTo ( )
 
 } // end class Categoria

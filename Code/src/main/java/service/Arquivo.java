@@ -147,6 +147,12 @@ public class Arquivo<T extends Registro> {
         return arquivo.readInt();
     } // end readNextId ( )
 
+    // criar metodo isEmpty que verifica se o arquivo está vazio
+    public boolean isEmpty() throws IOException {
+        arquivo.seek(TAM_CABECALHO);
+        return arquivo.read() == -1;
+    } // end isEmpty ( )
+
     public boolean update(T novoObj) throws Exception {
         boolean result = false;
         T obj;

@@ -1,73 +1,60 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 
 import model.Categoria;
 
 /**
- * ArquivoCategoria: Classe que representa um arquivo de categorias.
+ *  ArquivoCategoria: Classe que representa um arquivo de categorias.
  */
-public class ArquivoCategoria extends Arquivo<Categoria> {
+public class ArquivoCategoria extends Arquivo<Categoria>
+{
     Arquivo<Categoria> arqTarefa;
     ArvoreBMais<ParNomeIDCategoria> indiceIndiretoNome;
 
-    public ArquivoCategoria() throws Exception {
-        super("Categorias.db", Categoria.class.getConstructor());
-        indiceIndiretoNome = new ArvoreBMais<>(
-                ParNomeIDCategoria.class.getConstructor(),
-                5,
-                ".\\Code\\src\\main\\data\\indiceIndiretoNome.bptree.db");
+    public ArquivoCategoria ( ) throws Exception 
+    {
+        super( "Categorias.db", Categoria.class.getConstructor() );
+        indiceIndiretoNome = new ArvoreBMais<>
+        ( 
+            ParNomeIDCategoria.class.getConstructor(),
+            5, 
+            ".\\Code\\src\\main\\data\\Categorias.db.bpt.idx" 
+        );
     } // end ArquivoCategoria ( )
 
-    @Override
-    public int create(Categoria obj) throws Exception {
-        int id = super.create(obj);
-        indiceIndiretoNome.create(new ParNomeIDCategoria(obj.getNome(), id));
-        return id;
-    } // end create ( )
+    public List<Categoria> readAll( ) throws Exception 
+    {
+        List<Categoria> categorias = new ArrayList<>( );
 
-    public Categoria read(String nome) throws Exception {
-        ArrayList<ParNomeIDCategoria> picn = indiceIndiretoNome.read(new ParNomeIDCategoria(nome, -1));
-        return super.read(picn.get(0).getIDCategoria());
-    } // end read ( )
+        arquivo.seek( TAM_CABECALHO );
+        byte lapide = ' ';
+        short tam = 0;
+        byte[] b = null;
 
-    public boolean delete(int nome) throws Exception {
-        boolean result = false;
-        Categoria obj = super.read(nome);
-        if (obj != null) {
-            if (indiceIndiretoNome.delete(new ParNomeIDCategoria(obj.getNome(), obj.getId()))) {
-                result = super.delete(obj.getId());
+        Categoria c = null;
+
+        // Lê até o final do arquivo
+        while( arquivo.getFilePointer() < arquivo.length() ) 
+        {
+            lapide = arquivo.readByte();
+            tam = arquivo.readShort();
+            b = new byte[tam];
+            arquivo.read(b);
+
+            if( lapide != '*' ) 
+            {
+                c = new Categoria();
+                c.fromByteArray(b);
+                categorias.add(c);
             } // end if
-        } // end if
-        return result;
-    } // end delete ( )
+        } // end while
 
-    @Override
-    public boolean update(Categoria novaCategoria) throws Exception {
-        boolean result = false;
-        Categoria categoriaAntiga = super.read(novaCategoria.getId());
-        if (super.update(novaCategoria)) {
-            if (novaCategoria.getNome() != categoriaAntiga.getNome()) {
-                if (indiceIndiretoNome
-                        .delete(new ParNomeIDCategoria(categoriaAntiga.getNome(), categoriaAntiga.getId()))) {
-                    indiceIndiretoNome.create(new ParNomeIDCategoria(novaCategoria.getNome(), novaCategoria.getId()));
-                } // end if
-                result = true;
-            } // end if
-        } // end if
-        return result;
-    } // end update ( )
+        Collections.sort( categorias );
 
-    // metodo para listar todas as categorias
-    public ArrayList<Categoria> readAll() throws Exception {
-        ArrayList<Categoria> categorias = new ArrayList<>();
-        for (int i = 0; i <= super.readNextId(); i++) {
-            Categoria categoria = super.read(i);
-            if (categoria != null) {
-                categorias.add(categoria);
-            } // end if
-        } // end for
-        return categorias;
+        return ( categorias );  
     } // end readAll ( )
 
 } // end class ArquivoCategoria

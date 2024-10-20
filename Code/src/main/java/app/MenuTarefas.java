@@ -3,7 +3,9 @@ package app;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
+import model.Categoria;
 import model.Tarefa;
 import service.ArquivoCategoria;
 import service.ArquivoTarefa;
@@ -152,6 +154,7 @@ public class MenuTarefas extends IO {
                 if (resp == 'S' || resp == 's') {
                     try {
                         arqTarefas.create(novaTarefa);
+
                         System.out.println(GREEN + "Tarefa incluída com sucesso!" + RESET);
                     } catch (Exception e) {
                         System.out.println(RED + "Erro do sistema. Não foi possível criar a tarefa!" + RESET);
@@ -171,16 +174,122 @@ public class MenuTarefas extends IO {
         return result;
     } // end buscarTarefa ( )
 
-    public static boolean alterarTarefa() {
-        boolean result = false;
-        System.out.println("\nAlterar Tarefa:");
-        return result;
-    } // end alterarTarefa ( )
+    // listarTarefas
 
-    public static boolean excluirTarefa() {
-        boolean result = false;
-        System.out.println("\nExcluir Tarefa:");
-        return result;
-    } // end excluirTarefa ( )
+    private static void listarTarefas(List<Tarefa> lista) {
+        if (lista != null) {
+            System.out.println("\nLista de tarefas:");
+            int tam = lista.size();
+            for (int i = 0; i < tam; i++) {
+                System.out.println((i + 1) + ": " + lista.get(i).getNome());
+            } // end for
+        } // end if
+    } // end listarTarefas ( )
+
+    // criar de fato o modo alterarTarefa, criar ele de verdade, sem ser só um print
+    public static void alterarTarefa() {
+        System.out.println("\n> Alterar Tarefa:");
+
+        try {
+            List<Tarefa> lista = arqTarefas.readAll();
+
+            if (lista.isEmpty()) {
+                System.out.println(RED + "Não há tarefa cadastrada." + RESET);
+            } else {
+                listarTarefas(lista);
+
+                System.out.print("Nome da Tarefa: ");
+                String nome = console.nextLine();
+
+                if (nome.length() > 0) {
+                    Tarefa tarefaEncontrada = null;
+                    boolean encontrada = false;
+                    int tam = lista.size();
+                    for (int i = 0; i < tam && !encontrada; i++) {
+                        if (lista.get(i).getNome().equalsIgnoreCase(nome)) {
+                            tarefaEncontrada = lista.get(i);
+                            encontrada = true;
+                        } // end if
+                    } // end for
+
+                    if (tarefaEncontrada != null) {
+                        Tarefa novaTarefa = ler_Tarefa();
+
+                        if (novaTarefa != null && novaTarefa.getNome().length() > 0) {
+                            novaTarefa.setId(tarefaEncontrada.getId());
+                            arqTarefas.update(novaTarefa);
+                            System.out.println(GREEN + "Tarefa alterada com sucesso." + RESET);
+                        } else {
+                            System.out.println(RED + "Operação cancelada!" + RESET);
+                        } // end if
+                    } else {
+                        System.out.println(RED + "Tarefa não encontrada." + RESET);
+                    } // end if
+                } else {
+                    System.out.println(RED + "Operação cancelada!" + RESET);
+                } // end if
+            } // end if
+
+        } catch (Exception e) {
+            System.out.println(RED + "Erro no sistema. Não foi possível alterar a Tarefa!" + RESET);
+        } // end try
+    } // end alterarTarefa
+
+    public static void excluirTarefa() {
+        System.out.println("\n> Excluir Tarefa:");
+
+        try {
+            List<Tarefa> lista = arqTarefas.readAll();
+
+            if (lista.isEmpty()) {
+                System.out.println(RED + "Não há tarefa cadastrada." + RESET);
+            } else {
+                System.out.println("\nLista de tarefas:");
+                listarTarefas(lista);
+
+                System.out.print("Nome da tarefa: ");
+                String nome = console.nextLine();
+
+                if (nome.length() > 0) {
+                    Tarefa tarefaEncontrada = null;
+                    boolean encontrada = false;
+                    int tam = lista.size();
+                    for (int i = 0; i < tam && !encontrada; i++) {
+                        if (lista.get(i).getNome().equalsIgnoreCase(nome)) {
+                            tarefaEncontrada = lista.get(i);
+                            encontrada = true;
+                        } // end if
+                    } // end for
+
+                    if (tarefaEncontrada != null) {
+                        System.out.print("\nTarefa:");
+                        System.out.println(tarefaEncontrada);
+
+                        System.out.println("\nConfirma a exclusão da tarefa? (S/N)");
+                        char resp = console.nextLine().charAt(0);
+
+                        if (resp == 'S' || resp == 's') {
+                            boolean sucesso = arqTarefas.delete(tarefaEncontrada.getId());
+
+                            if (sucesso) {
+                                System.out.println(GREEN + "Tarefa excluída com sucesso." + RESET);
+                            } else {
+                                System.out.println(RED + "Erro: Não foi possível excluir a tarefa." + RESET);
+                            } // end if
+                        } // end if
+                    } else {
+                        System.out.println(RED + "Tarefa não encontrada." + RESET);
+                    } // end if
+                } else {
+                    System.out.println(RED + "Operação cancelada!" + RESET);
+                } // end if
+            } // end if
+
+        } catch (Exception e) {
+            // printar excecao
+            System.out.println(e.getMessage());
+            System.out.println(RED + "Erro no sistema. Não foi possível excluir a tarefa!" + RESET);
+        } // end try
+    } // end excluirTarefa
 
 } // end class MenuTarefas
