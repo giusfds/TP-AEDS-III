@@ -97,6 +97,19 @@ A integração entre os Menus e os Arquivos seguiu o padrão MVC, o que facilito
    SIM
    ```
 
+## Problema / Erro
+
+Nessa segunda parte do projeto, mais especificamente na utilização da Árvore B+, enfrentamos o seguinte problema: após a
+criação da primeira Tarefa, todas as Tarefas seguintes que forem criadas terá um erro de inserção na método `create( )` 
+da `ArvoreBMais.java`.
+
+Os passos de testes realizados são:
+
+1. Ir no menu de categorias e criar uma nova categoria.
+2. Ir no menu de tarefas e inserir duas novas tarefas.
+3. Após isso, é gerado a seguinte mensagem de erro:
+![error_message](img_error_message.png)
+
 ## Integrantes
 
 - [Breno Pires](https://www.linkedin.com/in/brenopiressantos/)
