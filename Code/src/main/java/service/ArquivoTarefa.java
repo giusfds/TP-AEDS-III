@@ -31,6 +31,7 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
             arvore.create( new ParIDCategoriaIDTarefa(obj.getIdCategoria(), obj.getId()) );
         } catch( Exception e ) {
             System.out.print( "" );
+            e.printStackTrace( );
         } // end try-catch
         return id;
     } // end create ( )
