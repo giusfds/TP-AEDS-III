@@ -13,9 +13,15 @@ package interfaces;
 import java.io.IOException;
 
 /**
- *  RegistroHashExtensivel: Interface que representa um registro a ser inserido na tabela hash extensível.
+ *  RegistroHashExtensivel
+ * 
+ *  <p>Interface que representa um registro de uma tabela hash extensível.</p>
+ *  <p>Define os métodos necessários para manipulação de registros.</p>
+ * 
+ *  @param <T> Tipo do registro
  */
-public interface RegistroHashExtensivel<T> {
+public interface RegistroHashExtensivel<T> 
+{
 
     public int hashCode( ); // chave numérica para ser usada no diretório
 

@@ -11,7 +11,12 @@ import java.util.regex.Pattern;
 import interfaces.Registro;
 
 /**
- *  Categoria: classe que representa uma categoria de tarefas.
+ *  Classe Categoria
+ * 
+ *  <p>Classe que representa uma categoria.</p>
+ *  <p>Implementa a interface Registro.</p>
+ *  
+ *  @see interfaces.Registro
  */
 public class Categoria implements Registro, Comparable<Categoria>
 {

@@ -1,4 +1,4 @@
-package service;
+package controller;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,7 +18,7 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
 {
     private String nome;
     private int idCategoria;
-    private final short TAMANHO = 32; // tamanho em bytes
+    private final short TAMANHO = 30; // tamanho em bytes
 
     public ParNomeIDCategoria ( ) 
     {
@@ -32,7 +32,7 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
 
     public ParNomeIDCategoria ( String nome, int idCategoria ) 
     {
-        if( nome.getBytes().length > 28 )
+        if( nome.getBytes().length > 26 )
             throw new IllegalArgumentException("Nome extenso demais. Diminua o número de caracteres.");
         this.nome = nome;
         this.idCategoria = idCategoria;
@@ -49,15 +49,15 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
     @Override
     public ParNomeIDCategoria clone ( ) 
     {
-        ParNomeIDCategoria pnic = null;
+        ParNomeIDCategoria parNomeId = null;
         try {
-            pnic = new ParNomeIDCategoria(this.nome, this.idCategoria);
+            parNomeId = new ParNomeIDCategoria(this.nome, this.idCategoria);
         } // end try
         catch ( Exception e ) {
-            pnic = null;
+            parNomeId = null;
             e.printStackTrace();
         } // end catch
-        return pnic;
+        return parNomeId;
     } // end clone ( )
 
     private static String strnormalize ( String str ) 
@@ -84,20 +84,20 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
-
-        byte[] ba = new byte[28];
+        int maxtam = 26;
+        byte[] ba = new byte[maxtam];
         byte[] baNome = this.nome.getBytes();
         int i = 0;
-        while( i < baNome.length && i < ba.length ) {
+        while( i < baNome.length ) {
             ba[i] = baNome[i];
             i++;
         } // end while
-        while( i < 28 ) {
+        while( i < maxtam ) {
             ba[i] = ' ';
             i++;
         } // end while
 
-        dos.write( baNome );
+        dos.write( ba );
         dos.writeInt(this.idCategoria);
         
         return ( baos.toByteArray() );

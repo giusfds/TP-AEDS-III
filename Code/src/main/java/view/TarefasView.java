@@ -1,24 +1,29 @@
-package app;
+package view;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
 
+import controller.ArquivoCategoria;
+import controller.ArquivoTarefa;
 import model.Categoria;
 import model.Tarefa;
-import service.ArquivoCategoria;
-import service.ArquivoTarefa;
 
 /**
- * MenuTarefas: Classe de interação com o usuário para manipulação de tarefas.
+ *  Classe TarefasView
+ * 
+ *  <p>Classe que representa a interface de usuário para manipulação de tarefas.</p>
+ * 
+ *  @see PrincipalView
  */
-public class MenuTarefas extends IO 
+public class TarefasView extends PrincipalView 
 {
     private static ArquivoTarefa arqTarefas;
     private static ArquivoCategoria arqCategorias;
 
-    public MenuTarefas ( ) throws Exception 
+    public TarefasView ( ) throws Exception 
     {
         arqTarefas = new ArquivoTarefa();
         arqCategorias = new ArquivoCategoria();
@@ -145,7 +150,7 @@ public class MenuTarefas extends IO
         Tarefa tarefa = null;
         try
         {
-            List<Categoria> categorias = arqCategorias.readAll( );
+            List<Categoria> categorias = arqCategorias.readAll( -1 );
 
             if( categorias.isEmpty( ) ) 
             {
@@ -266,7 +271,7 @@ public class MenuTarefas extends IO
         
         try 
         {
-            List<Tarefa> lista = arqTarefas.readAll( );
+            ArrayList<Tarefa> lista = arqTarefas.readAll( -1 );
 
             if( lista.isEmpty( ) ) {
                 System.out.println( RED + "Não há tarefas cadastrada." + RESET );
@@ -314,7 +319,7 @@ public class MenuTarefas extends IO
 
         try 
         {
-            List<Tarefa> lista = arqTarefas.readAll( );
+            ArrayList<Tarefa> lista = arqTarefas.readAll( -1 );
 
             if( lista.isEmpty( ) ) {
                 System.out.println( RED + "Não há tarefa cadastrada." + RESET );
@@ -374,7 +379,7 @@ public class MenuTarefas extends IO
 
         try
         {
-            List<Tarefa> lista = arqTarefas.readAll();
+            ArrayList<Tarefa> lista = arqTarefas.readAll( -1 );
 
             if( lista.isEmpty() ) {
                 System.out.println(RED + "Não há tarefa cadastrada." + RESET);
@@ -439,7 +444,7 @@ public class MenuTarefas extends IO
 
         try 
         {
-            List<Categoria> categorias = arqCategorias.readAll( );
+            List<Categoria> categorias = arqCategorias.readAll( -1 );
 
             if( categorias.isEmpty( ) ) 
             {

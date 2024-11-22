@@ -10,7 +10,12 @@ import java.io.DataInputStream;
 import interfaces.Registro;
 
 /**
- *  Tarefa: Classe que representa uma tarefa a ser realizada.
+ *  Classe Tarefa
+ * 
+ *  <p>Classe que representa uma tarefa.</p>
+ *  <p>Implementa a interface Registro.</p>
+ *  
+ *  @see interfaces.Registro
  */
 public class Tarefa implements Registro 
 {
@@ -22,28 +27,18 @@ public class Tarefa implements Registro
     private byte      prioridade;
     private int       idCategoria;
 
-    public Tarefa ( ) {
+    public Tarefa( ) {
         this(-1, "", LocalDate.now(), LocalDate.now(), (byte) -1, (byte) -1);
-    } // end Tarefa ( )
+    } // Tarefa ( )
 
-    public Tarefa ( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) 
+    public Tarefa( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) 
     {
         this.nome          = nome;
         this.dataCriacao   = dataCriacao;
         this.dataConclusao = dataConclusao;
         this.status        = status;
         this.prioridade    = prioridade;
-    } // end Tarefa ( )
-
-    public Tarefa ( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, int idCategoria ) 
-    {
-        this.nome          = nome;
-        this.dataCriacao   = dataCriacao;
-        this.dataConclusao = dataConclusao;
-        this.status        = status;
-        this.prioridade    = prioridade;
-        this.idCategoria   = idCategoria;
-    } // end Tarefa ( )
+    } // Tarefa ( )
 
     public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade )
     {
@@ -53,65 +48,87 @@ public class Tarefa implements Registro
         this.dataConclusao = dataConclusao;
         this.status        = status;
         this.prioridade    = prioridade;
-    } // end Tarefa ( )
-    
-    public int getId ( ) {
-        return this.id;
-    } // end getId ( )
-    
-    public void setId ( int id ) {
-        this.id = id;
-    } // end setId ( )
-    
-    public String getNome ( ) {
-        return this.nome;
-    } // end getNome ( )
+    } // Tarefa ( )
 
-    public void setNome ( String nome ) {
-        this.nome = nome;
-    } // end setNome ( )
-
-    public LocalDate getDataCriacao ( ) {
-        return this.dataCriacao;
-    } // end getDataCriacao ( )
-
-    public void setDataCriacao ( LocalDate dataCriacao ) {
-        this.dataCriacao = dataCriacao;
-    } // end setDataCriacao ( )
-
-    public LocalDate getDataConclusao ( ) {
-        return this.dataConclusao;
-    } // end getDataConclusao ( )
-
-    public void setDataConclusao ( LocalDate dataConclusao ) {
+    public Tarefa( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, int idCategoria ) 
+    {
+        this.nome          = nome;
+        this.dataCriacao   = dataCriacao;
         this.dataConclusao = dataConclusao;
-    } // end setDataConclusao ( )
+        this.status        = status;
+        this.prioridade    = prioridade;
+        this.idCategoria   = idCategoria;
+    } // Tarefa ( )
 
-    public byte getStatus ( ) {
+    public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, 
+                    int idCategoria )
+    {
+        this.id            = id;
+        this.nome          = nome;
+        this.dataCriacao   = dataCriacao;
+        this.dataConclusao = dataConclusao;
+        this.status        = status;
+        this.prioridade    = prioridade;
+        this.idCategoria   = idCategoria;
+    } // Tarefa ( )
+    
+    public int getId( ) {
+        return this.id;
+    } // getId ( )
+    
+    public void setId( int id ) {
+        this.id = id;
+    } // setId ( )
+    
+    public String getNome( ) {
+        return this.nome;
+    } // getNome ( )
+
+    public void setNome( String nome ) {
+        this.nome = nome;
+    } // setNome ( )
+
+    public LocalDate getDataCriacao( ) {
+        return this.dataCriacao;
+    } // getDataCriacao ( )
+
+    public void setDataCriacao( LocalDate dataCriacao ) {
+        this.dataCriacao = dataCriacao;
+    } // setDataCriacao ( )
+
+    public LocalDate getDataConclusao( ) {
+        return this.dataConclusao;
+    } // getDataConclusao ( )
+
+    public void setDataConclusao( LocalDate dataConclusao ) {
+        this.dataConclusao = dataConclusao;
+    } // setDataConclusao ( )
+
+    public byte getStatus( ) {
         return this.status;
-    } // end getStatus ( )
+    } // getStatus ( )
 
-    public void setStatus ( byte status ) {
+    public void setStatus( byte status ) {
         this.status = status;
-    } // end setStatus ( )
+    } // setStatus ( )
 
-    public byte getPrioridade ( ) {
+    public byte getPrioridade( ) {
         return this.prioridade;
-    } // end getPrioridade ( )
+    } // getPrioridade ( )
 
-    public void setPrioridade ( byte prioridade ) {
+    public void setPrioridade( byte prioridade ) {
         this.prioridade = prioridade;
-    } // end setPrioridade ( )
+    } // setPrioridade ( )
 
-    public int getIdCategoria ( ) {
+    public int getIdCategoria( ) {
         return this.idCategoria;
-    } // end getIdCategoria ( )
+    } // getIdCategoria ( )
 
-    public void setIdCategoria ( int idCategoria ) {
+    public void setIdCategoria( int idCategoria ) {
         this.idCategoria = idCategoria;
-    } // end setIdCategoria ( )
+    } // setIdCategoria ( )
 
-    private static String getStatusString ( byte status ) 
+    private static String getStatusString( byte status ) 
     {
         switch( status ) 
         {
@@ -121,10 +138,10 @@ public class Tarefa implements Registro
             case 4 : return "Cancelada"      ;
             case 5 : return "Atrasada"       ;
             default: return "Status inválido";
-        } // end switch
-    } // end getStatusString ( )
+        } // switch
+    } // getStatusString ( )
 
-    private static String getPrioridadeString ( byte prioridade ) 
+    private static String getPrioridadeString( byte prioridade ) 
     {
         switch( prioridade ) 
         {
@@ -134,13 +151,13 @@ public class Tarefa implements Registro
             case 4 : return "Alta"               ;
             case 5 : return "Urgente"            ;
             default: return "Prioridade inválida";
-        } // end switch
-    } // end getPrioridadeString ( )
+        } // switch
+    } // getPrioridadeString ( )
 
-    private static String getDataString ( LocalDate data ) 
+    private static String getDataString( LocalDate data ) 
     {
         return data.getDayOfMonth() + "/" + data.getMonthValue() + "/" + data.getYear();
-    } // end getDataString ( )
+    } // getDataString ( )
 
     public String toString ( ) 
     {
@@ -152,9 +169,9 @@ public class Tarefa implements Registro
                 "\nPrioridade.......: " + getPrioridadeString( this.prioridade ) +
                 "\nCategoria........: " + this.idCategoria
                 );
-    } // end toString ( )
+    } // toString ( )
 
-    public byte[] toByteArray ( ) throws IOException 
+    public byte[] toByteArray( ) throws IOException 
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
@@ -168,9 +185,9 @@ public class Tarefa implements Registro
         dos.writeInt (this.idCategoria); // idCategoria
 
         return baos.toByteArray();
-    } // end toByteArray ( )
+    } // toByteArray ( )
 
-    public void fromByteArray ( byte[] b ) throws IOException 
+    public void fromByteArray( byte[] b ) throws IOException 
     {
         ByteArrayInputStream bais = new ByteArrayInputStream(b);
         DataInputStream dis = new DataInputStream(bais);
@@ -182,6 +199,6 @@ public class Tarefa implements Registro
         this.status        = dis.readByte();
         this.prioridade    = dis.readByte();
         this.idCategoria   = dis.readInt();
-    } // end fromByteArray ( )
+    } // fromByteArray ( )
 
-} // end class Tarefa
+} // class Tarefa

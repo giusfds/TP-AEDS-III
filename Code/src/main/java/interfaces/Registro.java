@@ -3,14 +3,19 @@ package interfaces;
 import java.io.IOException;
 
 /**
- * Registro: Interface que define os métodos que devem ser implementados por uma classe que deseja ser um registro.
+ *  Classe Registro
+ * 
+ *  <p>Interface que representa um registro.</p>
+ *  <p>Define os métodos necessários para manipulação de registros.</p>
  */
-public interface Registro {
-    public void setId ( int i );
+public interface Registro 
+{
+    public void setId( int i );
 
-    public int getId ( );
+    public int getId( );
 
-    public byte[] toByteArray ( ) throws IOException;
+    public byte[] toByteArray( ) throws IOException;
 
-    public void fromByteArray ( byte[] b ) throws IOException;
+    public void fromByteArray( byte[] b ) throws IOException;
+    
 } // end interface Registro

@@ -1,4 +1,4 @@
-package service;
+package controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,15 @@ import java.lang.reflect.Constructor;
 import interfaces.*;
 
 /**
- *  Arquivo: Classe generica que representa um arquivo de registros.
+ *  Classe Arquivo
+ * 
+ *  <p>Classe que representa um arquivo de registros.</p>
+ *  <p>Implementa as operações de criação, leitura, atualização e exclusão de registros.</p>
+ *  <p>Implementa um índice direto para acesso rápido aos registros.</p>
+ * 
+ *  @param <T> tipo do registro
+ *  @see HashExtensivel
+ *  @see Registro
  */
 public class Arquivo<T extends Registro> 
 {
