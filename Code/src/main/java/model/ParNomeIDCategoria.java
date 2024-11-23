@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,101 +18,111 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
 {
     private String nome;
     private int idCategoria;
-    private final short TAMANHO = 30; // tamanho em bytes
+    private final short TAMANHO = 30; // tamanho total em bytes
+    private final short TAM_NOME = 26; // tamanho do nome em bytes
 
-    public ParNomeIDCategoria ( ) 
+    public ParNomeIDCategoria( ) 
     {
         this( "", -1 );
-    } // end ParNomeIDCategoria ( )
+    } // ParNomeIDCategoria ( )
 
-    public ParNomeIDCategoria ( String nome ) 
+    public ParNomeIDCategoria( String nome ) 
     {
         this( nome, -1 );
-    } // end ParNomeIDCategoria ( )
+    } // ParNomeIDCategoria ( )
 
-    public ParNomeIDCategoria ( String nome, int idCategoria ) 
+    public ParNomeIDCategoria( String nome, int idCategoria ) 
     {
-        if( nome.getBytes().length > 26 )
+        if( nome.getBytes().length > TAM_NOME )
             throw new IllegalArgumentException("Nome extenso demais. Diminua o número de caracteres.");
         this.nome = nome;
         this.idCategoria = idCategoria;
-    } // end ParNomeIDCategoria ( )
+    } // ParNomeIDCategoria ( )
 
-    public int getIDCategoria ( ) {
+    public int getIDCategoria( ) {
         return idCategoria;
-    } // end getId ( )
+    } // getId ( )
 
-    public String getNome ( ) {
+    public String getNome( ) {
         return nome;
-    } // end getNome ( )
+    } // getNome ( )
 
     @Override
-    public ParNomeIDCategoria clone ( ) 
+    public ParNomeIDCategoria clone( ) 
     {
         ParNomeIDCategoria parNomeId = null;
         try {
             parNomeId = new ParNomeIDCategoria(this.nome, this.idCategoria);
-        } // end try
+        } // try
         catch ( Exception e ) {
             parNomeId = null;
             e.printStackTrace();
-        } // end catch
+        } // catch
         return parNomeId;
-    } // end clone ( )
+    } // clone ( )
 
-    private static String strnormalize ( String str ) 
+    private static String strnormalize( String str ) 
     {
         String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(nfdNormalizedString).replaceAll("").toLowerCase();
-    } // end transforma ( )
+    } // strnormalize ( )
 
-    public int compareTo ( ParNomeIDCategoria picn ) 
+    public int compareTo( ParNomeIDCategoria picn )
     {
-        return strnormalize(this.nome).compareTo( strnormalize(picn.nome) );
-    } // end compareTo ( )
+        if( this.nome.equals(" ") || this.idCategoria == -1 ) {
+            return 0;
+        }
+        if( picn.nome.equals(" ") || picn.idCategoria == -1 ) {
+            return 0;
+        }
+        if( this.nome == null || picn.nome == null ) {
+            throw new IllegalArgumentException("Nome não pode ser nulo.");
+        } // if
+        return strnormalize(this.nome).compareTo(strnormalize(picn.nome));
+    } // compareTo ( )
 
-    public short size ( ) {
+    public short size( ) {
         return this.TAMANHO;
-    } // end size ( )
+    } // size ( )
 
-    public String toString ( ) {
+    public String toString( ) {
         return "(" + this.nome + ";" + String.format("%3d", this.idCategoria) + ")";
-    } // end toString ( )
+    } // toString ( )
 
-    public byte[] toByteArray ( ) throws IOException 
+    public byte[] toByteArray( ) throws IOException 
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
-        int maxtam = 26;
-        byte[] ba = new byte[maxtam];
+
+        byte[] ba = new byte[TAM_NOME];
         byte[] baNome = this.nome.getBytes();
         int i = 0;
         while( i < baNome.length ) {
             ba[i] = baNome[i];
             i++;
-        } // end while
-        while( i < maxtam ) {
+        } // while
+        while( i < TAM_NOME ) {
             ba[i] = ' ';
             i++;
-        } // end while
+        } // while
 
         dos.write( ba );
         dos.writeInt(this.idCategoria);
         
         return ( baos.toByteArray() );
-    } // end toByteArray ( )
+    } // toByteArray ( )
 
-    public void fromByteArray ( byte[] ba ) throws IOException 
+    public void fromByteArray( byte[] ba ) throws IOException 
     {
         ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
     
-        byte[] b = new byte[28];
+        byte[] b = new byte[TAM_NOME];
         dis.read(b);
         
         this.nome = (new String(b)).trim();
         this.idCategoria = dis.readInt();
-    } // end fromByteArray ( )
+    } // fromByteArray ( )
     
-} // end class ParNomeIDCategoria
+} // ParNomeIDCategoria

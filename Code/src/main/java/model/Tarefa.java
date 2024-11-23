@@ -175,15 +175,18 @@ public class Tarefa implements Registro
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
-
-        dos.writeInt (this.id);
-        dos.writeUTF (this.nome); // nome
-        dos.writeInt ((int)this.dataCriacao.toEpochDay()); // data de criação
-        dos.writeInt ((int)this.dataConclusao.toEpochDay()); // data de conclusão
-        dos.writeByte(this.status); // status
-        dos.writeByte(this.prioridade); // prioridade
-        dos.writeInt (this.idCategoria); // idCategoria
-
+        try
+        {
+            dos.writeInt (this.id);
+            dos.writeUTF (this.nome); // nome
+            dos.writeInt ((int)this.dataCriacao.toEpochDay()); // data de criação
+            dos.writeInt ((int)this.dataConclusao.toEpochDay()); // data de conclusão
+            dos.writeByte(this.status); // status
+            dos.writeByte(this.prioridade); // prioridade
+            dos.writeInt (this.idCategoria); // idCategoria
+        } catch( IOException e ) {
+            System.out.println( "Erro ao transformar objeto tarefa em byte[]: " + e.getMessage( ) );
+        } // try-catch
         return baos.toByteArray();
     } // toByteArray ( )
 
@@ -191,14 +194,18 @@ public class Tarefa implements Registro
     {
         ByteArrayInputStream bais = new ByteArrayInputStream(b);
         DataInputStream dis = new DataInputStream(bais);
-
-        this.id            = dis.readInt();
-        this.nome          = dis.readUTF();
-        this.dataCriacao   = LocalDate.ofEpochDay(dis.readInt());
-        this.dataConclusao = LocalDate.ofEpochDay(dis.readInt());
-        this.status        = dis.readByte();
-        this.prioridade    = dis.readByte();
-        this.idCategoria   = dis.readInt();
+        try
+        {
+            this.id            = dis.readInt();
+            this.nome          = dis.readUTF();
+            this.dataCriacao   = LocalDate.ofEpochDay(dis.readInt());
+            this.dataConclusao = LocalDate.ofEpochDay(dis.readInt());
+            this.status        = dis.readByte();
+            this.prioridade    = dis.readByte();
+            this.idCategoria   = dis.readInt();
+        } catch( IOException e ) {
+            System.out.println("Erro ao converter byte[] em objeto tarefa: " + e.getMessage( ) );
+        } // try-catch
     } // fromByteArray ( )
 
-} // class Tarefa
+} // Tarefa

@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.lang.reflect.Constructor;
 
-import interfaces.*;
+import interfaces.Registro;
+import model.HashExtensivel;
+import model.ParIDEndereco;
 
 /**
  *  Classe Arquivo
@@ -33,14 +35,14 @@ public class Arquivo<T extends Registro>
         File d = new File(".\\Code\\src\\main\\data");
         if( !d.exists( ) ) {
             d.mkdir();
-        } // end if
+        } // if
 
         this.nomeArquivo = ".\\Code\\src\\main\\data\\" + na;
         this.construtor = c;
         arquivo = new RandomAccessFile(this.nomeArquivo, "rw");
         if( arquivo.length() < TAM_CABECALHO ) {
             arquivo.writeInt(0);
-        } // end if
+        } // if
 
         indiceDireto = new HashExtensivel<>
         (
@@ -49,7 +51,7 @@ public class Arquivo<T extends Registro>
             this.nomeArquivo + ".d.idx",
             this.nomeArquivo + ".c.idx"
         );
-    } // end Arquivo ( )
+    } // Arquivo ( )
 
     /**
      *  Cria um novo registro no arquivo
@@ -76,7 +78,7 @@ public class Arquivo<T extends Registro>
         indiceDireto.create(new ParIDEndereco(proximoID, endereco));
 
         return obj.getId( );
-    } // end create ( )
+    } // create ( )
 
     /**
      *  Le um registro do arquivo
@@ -105,11 +107,11 @@ public class Arquivo<T extends Registro>
                 obj.fromByteArray(b);
                 if( obj.getId() == id ) {
                     return obj;
-                } // end if
-            } // end if
-        } // end if
+                } // if
+            } // if
+        } // if
         return null;
-    } // end read ( )
+    } // read ( )
 
     /**
      *  Atualiza um registro no arquivo
@@ -144,12 +146,12 @@ public class Arquivo<T extends Registro>
                         arquivo.seek(pie.getEndereco());
                         arquivo.write('*');
                         result = true;
-                    } // end if
-                } // end if
-            } // end if
-        } // end if
+                    } // if
+                } // if
+            } // if
+        } // if
         return ( result );
-    } // end delete ( )
+    } // delete ( )
 
     /**
      *  Atualiza um registro no arquivo
@@ -197,13 +199,13 @@ public class Arquivo<T extends Registro>
                         arquivo.writeShort(tam2);
                         arquivo.write(b2);
                         indiceDireto.update(new ParIDEndereco(novoObj.getId(), novoEndereco));
-                    } // end if
+                    } // if
                     result = true;
-                } // end if
-            } // end if
-        } // end if
+                } // if
+            } // if
+        } // if
         return ( result );
-    } // end update ( )
+    } // update ( )
 
     /**
      *  Fecha o arquivo
@@ -211,6 +213,6 @@ public class Arquivo<T extends Registro>
      */
     public void close ( ) throws IOException {
         arquivo.close( );
-    } // end close ( )
+    } // close ( )
 
-} // end class Arquivo
+} // Arquivo

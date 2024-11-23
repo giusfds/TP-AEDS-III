@@ -2,6 +2,8 @@ package controller;
 
 import java.util.ArrayList;
 
+import model.ArvoreBMais;
+import model.ParIDCategoriaIDTarefa;
 import model.Tarefa;
 
 /**
@@ -22,7 +24,8 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
     public ArquivoTarefa( ) throws Exception 
     {
         super( "Tarefas.db", Tarefa.class.getConstructor() );
-        arvore = new ArvoreBMais<> ( 
+        arvore = new ArvoreBMais<> 
+        ( 
             ParIDCategoriaIDTarefa.class.getConstructor(),
             5, 
             ".\\Code\\src\\main\\data\\Tarefas.db.arvore.idx" 
@@ -33,54 +36,61 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
     public int create( Tarefa tarefa ) throws Exception 
     {
         int id = super.create( tarefa );
-        tarefa.setId( id );
         try {
-            arvore.create( new ParIDCategoriaIDTarefa(tarefa.getIdCategoria(), tarefa.getId()) );
+            arvore.create( new ParIDCategoriaIDTarefa( tarefa.getIdCategoria(), tarefa.getId() ) );
         } catch( Exception e ) {
-            System.out.print( "Erro create ArqTarefa" );
+            System.out.print( "Erro ao criar tarefa no índice: " + e.getMessage( ) );
         } // try-catch
-        return id;
+        return ( id );
     } // create ( )
 
-    @Override
-    public Tarefa read( int idCategoria ) throws Exception 
-    {
-        ArrayList<ParIDCategoriaIDTarefa> parIdId = arvore.read( new ParIDCategoriaIDTarefa(idCategoria, -1) );
-        return super.read( parIdId.get(0).getIDTarefa() );
-    } // end read ( )
+    public ArrayList<Tarefa> readAll( ) throws Exception {
+        return readAll( -1 );
+    } // readAll ( )
 
     public ArrayList<Tarefa> readAll( int idCategoria ) throws Exception 
     {
-        ArrayList<ParIDCategoriaIDTarefa> listaIdId = null;
-        ArrayList<Tarefa> tarefas = new ArrayList<>( );
-        try
+        ArrayList<Tarefa> tarefas = new ArrayList<>();
+        try 
         {
-            listaIdId = arvore.read( new ParIDCategoriaIDTarefa(idCategoria, -1) );
-            for( ParIDCategoriaIDTarefa parIdId : listaIdId ) 
-            {
-                tarefas.add( super.read( parIdId.getIDTarefa() ) );
+            ArrayList<ParIDCategoriaIDTarefa> listaTarefas;
+            
+            if( idCategoria == -1 ) {
+                listaTarefas = arvore.read( new ParIDCategoriaIDTarefa(-1, -1) );
+            } else {
+                listaTarefas = arvore.read( new ParIDCategoriaIDTarefa(idCategoria, -1) );
+            } // if
+
+            for( ParIDCategoriaIDTarefa parIdId : listaTarefas ) {
+                tarefas.add( super.read( parIdId.getIDTarefa( ) ) );
             } // for
+
         } catch( Exception e ) {
-            System.out.print( e.getMessage() );
+            System.out.println("Erro ao ler tarefas: " + e.getMessage());
         } // try-catch
-        return tarefas;
-    } // read ( )
+        return ( tarefas );
+    } // readAll ( )
 
     @Override
     public boolean update ( Tarefa novaTarefa ) throws Exception 
     {
         boolean result = false;
         Tarefa tarefaAntiga = super.read( novaTarefa.getId( ) );
-        if( super.update(novaTarefa) ) 
+        result = super.update( novaTarefa );
+        if( result ) 
         {
-            if( novaTarefa.getId() != tarefaAntiga.getId() ) 
+            try
             {
-                arvore.delete( new ParIDCategoriaIDTarefa(tarefaAntiga.getIdCategoria(), tarefaAntiga.getId()) );
-                arvore.create( new ParIDCategoriaIDTarefa(novaTarefa.getIdCategoria(), novaTarefa.getId()) );
-            } // if
-            result = true;
+                if( novaTarefa.getId() != tarefaAntiga.getId() ) 
+                {
+                    arvore.delete( new ParIDCategoriaIDTarefa( tarefaAntiga.getIdCategoria(), tarefaAntiga.getId() ) );
+                    arvore.create( new ParIDCategoriaIDTarefa( novaTarefa.getIdCategoria(), novaTarefa.getId() ) );
+                } // if
+            } catch( Exception e ) {
+                System.out.println( "Erro ao atualizar o índice: " + e.getMessage( ) );
+            } // try-catch
         } // if
-        return result;
+        return ( result );
     } // update ( )
 
     @Override
@@ -90,10 +100,15 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
         Tarefa tarefa = super.read( id );
         if( super.delete( id ) ) 
         {
-            arvore.delete( new ParIDCategoriaIDTarefa(tarefa.getIdCategoria(), id) );
-            result = true;
+            try 
+            {
+                arvore.delete( new ParIDCategoriaIDTarefa( tarefa.getIdCategoria(), id ) );
+                result = true;
+            } catch( Exception e ) {
+                System.out.println( "Erro ao deletar tarefa do índice: " + e.getMessage( ) );
+            } // try-catch
         } // if
-        return result;
+        return ( result );
     } // delete ( )
 
 } // ArquivoTarefa

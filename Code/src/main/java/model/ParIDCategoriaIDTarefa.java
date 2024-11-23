@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -23,15 +23,15 @@ public class ParIDCategoriaIDTarefa implements RegistroArvoreBMais<ParIDCategori
     private int idTarefa;    // valor
     private final short TAMANHO = 8;  // tamanho em bytes
 
-    public ParIDCategoriaIDTarefa( ) throws Exception {
+    public ParIDCategoriaIDTarefa( ) {
         this(-1, -1);
     } // ParIDCategoriaIDTarefa ( )
 
-    public ParIDCategoriaIDTarefa( int idCategoria ) throws Exception {
+    public ParIDCategoriaIDTarefa( int idCategoria ) {
         this( idCategoria, -1 );
     } // ParIDCategoriaIDTarefa ( )
 
-    public ParIDCategoriaIDTarefa( int idCategoria, int idTarefa ) throws Exception 
+    public ParIDCategoriaIDTarefa( int idCategoria, int idTarefa ) 
     {
         this.idCategoria = idCategoria;
         this.idTarefa = idTarefa;
@@ -57,13 +57,25 @@ public class ParIDCategoriaIDTarefa implements RegistroArvoreBMais<ParIDCategori
         return clone;
     } // clone ( )
 
-    public int compareTo( ParIDCategoriaIDTarefa other )
-    {
-        int result = 0xFFFFFF7;
-        if( this.idCategoria != other.idCategoria ) {
-            result = this.idCategoria - other.idCategoria;
-        } else {
-            result = ((this.idTarefa == -1) ? 0 : this.idTarefa - other.idTarefa);
+    // public int compareTo( ParIDCategoriaIDTarefa other )
+    // {
+    //     if( this.idCategoria != other.idCategoria ) {
+    //         return this.idCategoria - other.idCategoria;
+    //     } else {
+    //         return this.idTarefa == -1 ? 0 : this.idTarefa - other.idTarefa;
+    //     } // if
+    // } // compareTo ( )
+
+    public int compareTo(ParIDCategoriaIDTarefa other) {
+        if( this.idCategoria == -1 || this.idTarefa == -1 ) {
+            return 0;
+        } // if
+        if( other.idCategoria == -1 || other.idTarefa == -1 ) {
+            return 0;
+        } // if
+        int result = this.idCategoria - other.idCategoria;
+        if( result == 0 ) {
+            result = this.idTarefa - other.idTarefa;
         } // if
         return result;
     } // compareTo ( )

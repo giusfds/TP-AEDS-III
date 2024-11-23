@@ -11,7 +11,7 @@
  * Implementado pelo Prof. Marcos Kutova
  * v2.0 - 2021
  */
-package controller;
+package model;
 
 import java.io.*;
 import java.util.ArrayList;

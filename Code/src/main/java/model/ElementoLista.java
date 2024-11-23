@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 /**
  *  Classe que representa um elemento de uma lista de frequências.

@@ -5,8 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.text.Normalizer;
-import java.util.regex.Pattern;
 
 import interfaces.Registro;
 
@@ -18,49 +16,49 @@ import interfaces.Registro;
  *  
  *  @see interfaces.Registro
  */
-public class Categoria implements Registro, Comparable<Categoria>
+public class Categoria implements Registro
 {
-    private int       id;
-    private String    nome;
+    private int    id;
+    private String nome;
 
-    public Categoria ( ) {
+    public Categoria( ) {
         this( -1, "" );
-    } // end Categoria ( )
+    } // Categoria ( )
 
-    public Categoria ( String nome ) 
+    public Categoria( String nome ) 
     {
         this( -1, nome );
-    } // end Categoria ( )
+    } // Categoria ( )
 
     public Categoria( int id, String nome )
     {
         this.id   = id;
         this.nome = nome;
-    } // end Categoria ( )
+    } // Categoria ( )
     
-    public int getId ( ) {
+    public int getId( ) {
         return this.id;
-    } // end getId ( )
+    } // getId ( )
     
-    public void setId ( int id ) {
+    public void setId( int id ) {
         this.id = id;
-    } // end setId ( )
+    } // setId ( )
     
-    public String getNome ( ) {
+    public String getNome( ) {
         return this.nome;
-    } // end getNome ( )
+    } // getNome ( )
 
-    public void setNome ( String nome ) {
+    public void setNome( String nome ) {
         this.nome = nome;
-    } // end setNome ( )
+    } // setNome ( )
 
-    public String toString ( ) 
+    public String toString( ) 
     {
         return ("\nID..: " + this.id   +
                 "\nNome: " + this.nome);
-    } // end toString ( )
+    } // toString ( )
 
-    public byte[] toByteArray ( ) throws IOException 
+    public byte[] toByteArray( ) throws IOException 
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
@@ -69,27 +67,15 @@ public class Categoria implements Registro, Comparable<Categoria>
         dos.writeUTF(this.nome); // nome
 
         return baos.toByteArray();
-    } // end toByteArray ( )
+    } // toByteArray ( )
 
-    public void fromByteArray ( byte[] b ) throws IOException 
+    public void fromByteArray( byte[] b ) throws IOException 
     {
         ByteArrayInputStream bais = new ByteArrayInputStream(b);
         DataInputStream dis = new DataInputStream(bais);
 
         this.id   = dis.readInt();
         this.nome = dis.readUTF();
-    } // end fromByteArray ( )
+    } // fromByteArray ( )
 
-    private static String strnormalize ( String str ) 
-    {
-        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
-        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-        return pattern.matcher(nfdNormalizedString).replaceAll("").toLowerCase();
-    } // end transforma ( )
-
-    @Override
-    public int compareTo( Categoria outra ) {
-        return strnormalize(this.nome).compareTo( strnormalize(outra.nome) );
-    } // end compareTo ( )
-
-} // end class Categoria
+} // Categoria

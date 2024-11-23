@@ -2,7 +2,11 @@ package controller;
 
 import java.util.ArrayList;
 
+import model.ArvoreBMais;
+import model.ParNomeIDCategoria;
+import interfaces.RegistroArvoreBMais;
 import model.Categoria;
+import model.Tarefa;
 
 /**
  *  Classe ArquivoCategoria
@@ -40,33 +44,25 @@ public class ArquivoCategoria extends Arquivo<Categoria>
         {
             arvore.create( new ParNomeIDCategoria( categoria.getNome(), categoria.getId() ) );
         } catch( Exception e ) {
-            System.out.print( "Erro create ArqCategoria" );
+            System.out.println("Erro ao criar categoria no índice: " + e.getMessage());
         } // try-catch
-        return id;
+        return ( id );
     } // create ( )
 
-    @Override
-    public Categoria read( int id ) throws Exception 
-    {
-        Categoria categoria = super.read( id );
-        return categoria;
-    } // read ( )
-
-    public ArrayList<Categoria> readAll( int id ) throws Exception
+    public ArrayList<Categoria> readAll( ) throws Exception
     {
         ArrayList<ParNomeIDCategoria> listaNomeId = null;
         ArrayList<Categoria> categorias = new ArrayList<>( );
-        try
+        try 
         {
-            listaNomeId = arvore.read( new ParNomeIDCategoria("", id) );
-            for( ParNomeIDCategoria parNomeId : listaNomeId ) 
-            {
+            listaNomeId = arvore.read( new ParNomeIDCategoria(" ", -1) );
+            for( ParNomeIDCategoria parNomeId : listaNomeId ) {
                 categorias.add( super.read( parNomeId.getIDCategoria() ) );
             } // for
         } catch( Exception e ) {
             System.out.print( e.getMessage( ) );
         } // try-catch
-        return categorias;
+        return ( categorias );
     } // readAll ( )
 
     @Override
@@ -74,15 +70,21 @@ public class ArquivoCategoria extends Arquivo<Categoria>
     {
         boolean result = false;
         Categoria categoriaAntiga = super.read( novaCategoria.getId() );
-        if( super.update( novaCategoria ) )
+        result = super.update( novaCategoria );
+        if( result ) 
         {
-            if( novaCategoria.getId() != categoriaAntiga.getId() )
+            try 
             {
-                arvore.delete( new ParNomeIDCategoria( categoriaAntiga.getNome(), categoriaAntiga.getId() ) );
-                arvore.create( new ParNomeIDCategoria( novaCategoria.getNome(), novaCategoria.getId() ) );
-            } // if
+                if( !novaCategoria.getNome().equals(categoriaAntiga.getNome()) ) 
+                {
+                    arvore.delete( new ParNomeIDCategoria( categoriaAntiga.getNome(), categoriaAntiga.getId() ) );
+                    arvore.create( new ParNomeIDCategoria( novaCategoria.getNome(), novaCategoria.getId() ) );
+                } // if
+            } catch( Exception e ) {
+                System.out.println( "Erro ao atualizar o índice: " + e.getMessage( ) );
+            } // try-catch
         } // if
-        return result;
+        return ( result );
     } // update ( )
 
     @Override
@@ -90,12 +92,47 @@ public class ArquivoCategoria extends Arquivo<Categoria>
     {
         boolean result = false;
         Categoria categoria = super.read( id );
-        if( super.delete( id ) )
+
+        if( temTarefasAssociadas( categoria ) == false ) 
         {
-            arvore.delete( new ParNomeIDCategoria( categoria.getNome(), categoria.getId() ) );
+            if( super.delete( id ) ) 
+            {
+                try 
+                {
+                    arvore.delete( new ParNomeIDCategoria( categoria.getNome(), categoria.getId() ) );
+                    result = true;
+                } catch ( Exception e ) {
+                    System.out.println("Erro ao deletar do índice: " + e.getMessage());
+                } // try-catch
+            } // if
+        } // if
+        return ( result );
+    } // delete ( )
+
+    private boolean temTarefasAssociadas( Categoria categoria ) 
+    {
+        boolean result = true;
+        try 
+        {
+            ArquivoTarefa arquivoTarefa = new ArquivoTarefa( );
+            ArrayList<Tarefa> tarefas = arquivoTarefa.readAll( categoria.getId( ) );
+            if( tarefas.isEmpty( ) ) {
+                result = false;
+            } // if
+        } catch( Exception e ) {
+            System.out.println( "Erro ao verificar tarefas associadas à categoria: " + e.getMessage( ) );
+        } // try-catch
+        return ( result );
+    } // temTarefasAssociadas ( )
+
+    public boolean exitemCategorias( ) throws Exception 
+    {
+        boolean result = false;
+        ArrayList<Categoria> categorias = this.readAll( );
+        if( categorias.isEmpty( ) == false ) {
             result = true;
         } // if
-        return result;
-    } // delete ( )
+        return ( result );
+    } // exitemCategorias ( )
 
 } // ArquivoCategoria

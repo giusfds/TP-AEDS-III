@@ -1,4 +1,4 @@
-package controller;
+package model;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -18,40 +18,40 @@ public class ParIDEndereco implements RegistroHashExtensivel<ParIDEndereco>
     private long endereco;
     private final short TAMANHO = 12; // tamanho em bytes
 
-    public ParIDEndereco ( ) 
+    public ParIDEndereco( ) 
     {
         this.id = -1;
         this.endereco = -1;
-    } // end ParIDEndereco ( )
+    } // ParIDEndereco ( )
 
-    public ParIDEndereco ( int id, long end ) 
+    public ParIDEndereco( int id, long end ) 
     {
         this.id = id;
         this.endereco = end;
-    } // end ParIDEndereco ( )
+    } // ParIDEndereco ( )
 
-    public int getId ( ) {
+    public int getId( ) {
         return id;
-    } // end getId ( )
+    } // getId ( )
 
-    public long getEndereco ( ) {
+    public long getEndereco( ) {
         return endereco;
-    } // end getEndereco ( )
+    } // getEndereco ( )
 
     @Override
-    public int hashCode ( ) {
+    public int hashCode( ) {
         return this.id;
-    } // end hashCode ( )
+    } // hashCode ( )
 
-    public short size ( ) {
+    public short size( ) {
         return this.TAMANHO;
-    } // end size ( )
+    } // size ( )
 
-    public String toString ( ) {
+    public String toString( ) {
         return "(" + this.id + ";" + this.endereco + ")";
-    } // end toString ( )
+    } // toString ( )
 
-    public byte[] toByteArray ( ) throws IOException 
+    public byte[] toByteArray( ) throws IOException 
     {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
@@ -60,15 +60,15 @@ public class ParIDEndereco implements RegistroHashExtensivel<ParIDEndereco>
         dos.writeLong(this.endereco);
         
         return ( baos.toByteArray() );
-    } // end toByteArray ( )
+    } // toByteArray ( )
 
-    public void fromByteArray ( byte[] ba ) throws IOException 
+    public void fromByteArray( byte[] ba ) throws IOException 
     {
         ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
     
         this.id = dis.readInt();
         this.endereco = dis.readLong();
-    } // end fromByteArray ( )
+    } // fromByteArray ( )
     
-} // end class ParIDEndereco
+} // ParIDEndereco

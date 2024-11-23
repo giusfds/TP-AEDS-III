@@ -1,9 +1,8 @@
 package view;
 
-import java.util.List;
-
 import controller.ArquivoCategoria;
 import model.Categoria;
+import util.IO;
 
 /**
  *  Classe CategoriasView
@@ -49,7 +48,7 @@ public class CategoriasView extends PrincipalView
         System.out.print  ("Opção: "                  );
     } // opcoes_menu ( )
 
-    protected static void executar_opcao( int opcao )
+    protected static void executar_opcao( int opcao ) throws Exception
     {
         switch( opcao ) 
         {
@@ -74,41 +73,17 @@ public class CategoriasView extends PrincipalView
         } // switch
     } // executar_opcao ( )
 
-    private static void listarCategorias( List<Categoria> lista )
+    private static Categoria lerCategoria( )
     {
-        if( lista != null ) 
-        {
-            System.out.println( "\nLista de categorias:" );
-            int tam = lista.size( );
-            for( int i = 0; i < tam; i++ ) {
-                System.out.println( (i+1) + ": " + lista.get(i).getNome() );
-            } // for
-        } // if
-    } // listarCategorias ( )
-
-    private static Categoria ler_Categoria( )
-    {
-        String nome = "";
-        boolean dadosCompletos = false;
-        do 
-        {
-            System.out.print( "\nNome da categoria (min. de 5 letras): " );
-            nome = console.nextLine( );
-
-            if( nome.length( ) >= 5 || nome.length( ) == 0 ) {
-                dadosCompletos = true;
-            } else {
-                System.err.println( "O nome da categoria deve ter no mínimo 5 caracteres." );
-            } // if
-        } while( dadosCompletos == false ); // do-while
+        String nome = IO.lerString("\nNome da categoria (min. de 5 letras): ", 5, 50);
         return ( new Categoria( nome ) );
-    } // ler_Categoria ( )
+    } // lerCategoria ( )
 
     public static void incluirCategoria( ) 
     {
         System.out.println( "\n> Incluir categoria:" );
         
-        Categoria novaCategoria = ler_Categoria( );
+        Categoria novaCategoria = lerCategoria( );
 
         if( novaCategoria != null && novaCategoria.getNome().length() > 0 ) 
         {
@@ -125,56 +100,38 @@ public class CategoriasView extends PrincipalView
                     System.out.println( RED + "Erro do sistema. Não foi possível criar a categoria!" + RESET );
                 } // try-catch
             } // if
+
         } else {
             System.out.println( RED + "Operação cancelada!" + RESET );
         } // if 
     } // incluirCategoria ( )
 
-    public static void buscarCategoria( ) 
+    public static void buscarCategoria( ) throws Exception
     {
         System.out.println( "\n> Buscar Categoria:" );
-        
+    
         try 
         {
-            List<Categoria> lista = arqCategorias.readAll( -1 );
-
-            if( lista.isEmpty( ) ) {
-                System.out.println( RED + "Não há categoria cadastrada." + RESET );
-            } 
-            else 
+            if( IO.listarCategorias( arqCategorias ) )
             {
-                listarCategorias( lista );
 
-                System.out.print( "Id da Categoria: " );
-                String nome = console.nextLine(); 
-                
-                if( nome.length() > 0 ) 
-                {
-                    Categoria categoriaEncontrada = null;
-                    boolean encontrada = false;
-                    int tam = lista.size( );
-                    for( int i = 0; i < tam && !encontrada; i++ )
-                    {
-                        if( lista.get(i).getNome().equalsIgnoreCase(nome) ) 
-                        { 
-                            categoriaEncontrada = lista.get(i);
-                            encontrada = true;
-                        }//if
-                    } // for
+                System.out.print( "ID da Categoria: " );
+                int id = Integer.parseInt( console.nextLine( ) );
         
-                    if( categoriaEncontrada != null ) {
-                        System.out.println( GREEN + categoriaEncontrada + RESET );
-                    } else {
-                        System.out.println( RED + "Categoria não encontrada." + RESET );
-                    }//if
+                Categoria categoriaEncontrada = arqCategorias.read( id );
+        
+                if( categoriaEncontrada != null ) {
+                    System.out.println( GREEN + categoriaEncontrada + RESET );
                 } else {
-                    System.out.println( RED + "Operação cancelada!" + RESET );
+                    System.out.println( RED + "Categoria não encontrada." + RESET );
                 } // if
             } // if
 
+        } catch( NumberFormatException e ) {
+            System.out.println( RED + "ID inválido. Operação cancelada!" + RESET );
         } catch( Exception e ) {
-            System.err.println( RED + "Erro no sistema. Não foi possível buscar a categoria!" + RESET );
-        } //try
+            System.out.println( RED + "Erro no sistema. Não foi possível buscar a categoria!" + RESET );
+        } // try-catch
     } // buscarCategoria ( )
 
     public static void alterarCategoria( ) 
@@ -183,57 +140,38 @@ public class CategoriasView extends PrincipalView
     
         try 
         {
-            List<Categoria> lista = arqCategorias.readAll( -1 );
-
-            if( lista.isEmpty( ) ) {
-                System.out.println( RED + "Não há categoria cadastrada." + RESET );
-            } 
-            else
+            if( IO.listarCategorias( arqCategorias ) )
             {
-                System.out.println( "\nLista de categorias:" );
-                listarCategorias( lista );
 
-                System.out.print( "Nome da Categoria: " );
-                String nome = console.nextLine(); 
-
-                if( nome.length() > 0 ) 
+                System.out.print( "ID da Categoria: " );
+                int id = Integer.parseInt( console.nextLine( ) );
+        
+                Categoria categoriaEncontrada = arqCategorias.read( id );
+        
+                if( categoriaEncontrada != null ) 
                 {
-                    Categoria categoriaEncontrada = null;
-                    boolean encontrada = false;
-                    int tam = lista.size( );
-                    for( int i = 0; i < tam && !encontrada; i++ )
+                    Categoria novaCategoria = lerCategoria();
+        
+                    if( novaCategoria != null && novaCategoria.getNome().length() > 0 ) 
                     {
-                        if( lista.get(i).getNome().equalsIgnoreCase(nome) ) 
-                        { 
-                            categoriaEncontrada = lista.get(i);
-                            encontrada = true;
-                        }//if
-                    } // for
-
-                    if( categoriaEncontrada != null ) 
-                    {
-                        Categoria novaCategoria = ler_Categoria();
-                        
-                        if( novaCategoria != null && novaCategoria.getNome().length() > 0 )
-                        {  
-                            novaCategoria.setId( categoriaEncontrada.getId() );
-                            arqCategorias.update( novaCategoria );
-                            System.out.println( GREEN + "Categoria alterada com sucesso." + RESET );
-                        } else {
-                            System.out.println( RED + "Operação cancelada!" + RESET );
-                        }// if
+                        novaCategoria.setId( id );
+                        arqCategorias.update( novaCategoria );
+                        System.out.println( GREEN + "Categoria alterada com sucesso." + RESET );
                     } else {
-                        System.out.println( RED + "Categoria não encontrada." + RESET );
-                    }//if
+                        System.out.println( RED + "Operação cancelada!" + RESET );
+                    } // if
+
                 } else {
-                    System.out.println( RED + "Operação cancelada!" + RESET );
+                    System.out.println( RED + "Categoria não encontrada." + RESET );
                 } // if
             } // if
 
+        } catch( NumberFormatException e ) {
+            System.out.println(RED + "ID inválido. Operação cancelada!" + RESET);
         } catch( Exception e ) {
-            System.out.println( RED + "Erro no sistema. Não foi possível alterar a categoria!" + RESET );
-        }//try
-    } // alterarCategoria
+            System.out.println(RED + "Erro no sistema. Não foi possível alterar a categoria!" + RESET);
+        } // try-catch
+    } // alterarCategoria ( )
     
     public static void excluirCategoria( ) 
     {
@@ -241,62 +179,42 @@ public class CategoriasView extends PrincipalView
 
         try 
         {
-            List<Categoria> lista = arqCategorias.readAll( -1 );
-
-            if( lista.isEmpty( ) ) {
-                System.out.println( RED + "Não há categoria cadastrada." + RESET );
-            } 
-            else
+            if( IO.listarCategorias( arqCategorias ) )
             {
-                System.out.println( "\nLista de categorias:" );
-                listarCategorias( lista );
-
-                System.out.print("Nome da categoria: ");
-                String nome = console.nextLine(); 
-
-                if( nome.length() > 0 )
+                System.out.print( "ID da Categoria: " );
+                int id = Integer.parseInt( console.nextLine( ) );
+    
+                Categoria categoriaEncontrada = arqCategorias.read( id );
+    
+                if( categoriaEncontrada != null ) 
                 {
-                    Categoria categoriaEncontrada = null;
-                    boolean encontrada = false;
-                    int tam = lista.size( );
-                    for( int i = 0; i < tam && !encontrada; i++ )
+                    System.out.print( "\nCategoria:" );
+                    System.out.println( categoriaEncontrada );
+    
+                    System.out.println( "\nConfirma a exclusão da categoria? (S/N)" );
+                    char resp = console.nextLine( ).charAt( 0 );
+    
+                    if( resp == 'S' || resp == 's' ) 
                     {
-                        if( lista.get(i).getNome().equalsIgnoreCase(nome) ) 
-                        { 
-                            categoriaEncontrada = lista.get(i);
-                            encontrada = true;
-                        }//if
-                    } // for
-        
-                    if( categoriaEncontrada != null ) 
-                    {
-                        System.out.print  ( "\nCategoria:" );
-                        System.out.println( categoriaEncontrada );
-
-                        System.out.println("\nConfirma a exclusão da categoria? (S/N)");
-                        char resp = console.nextLine().charAt(0);  
-            
-                        if( resp == 'S' || resp == 's' ) 
-                        {
-                            boolean sucesso = arqCategorias.delete( categoriaEncontrada.getId() );
-
-                            if( sucesso ) {
-                                System.out.println( GREEN + "Categoria excluída com sucesso." + RESET );
-                            } else {
-                                System.out.println( RED + "Erro: Não foi possível excluir a categoria." + RESET );
-                            }// if
-                        }// if
-                    } else {
-                        System.out.println(RED + "Categoria não encontrada." + RESET);
-                    } //if
+                        boolean sucesso = arqCategorias.delete(id);
+    
+                        if( sucesso ) {
+                            System.out.println( GREEN + "Categoria excluída com sucesso." + RESET );
+                        } else {
+                            System.out.println( RED + "Erro: Não foi possível excluir a categoria porque ela possui tarefas associadas." + RESET );
+                        } // if
+                    } // if
+    
                 } else {
-                    System.out.println( RED + "Operação cancelada!" + RESET );
+                    System.out.println(RED + "Categoria não encontrada." + RESET);
                 } // if
             } // if
 
-        } catch( Exception e ) {
-            System.out.println( RED + "Erro no sistema. Não foi possível excluir a categoria!" + RESET );
-        } // try
-    } //excluirCategoria
+        } catch (NumberFormatException e) {
+            System.out.println(RED + "ID inválido. Operação cancelada!" + RESET);
+        } catch (Exception e) {
+            System.out.println(RED + "Erro no sistema. Não foi possível excluir a categoria!" + RESET);
+        } // try-catch
+    } // excluirCategoria ( )
     
-} // class MenuCategorias1
+} // CategoriasView
