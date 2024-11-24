@@ -66,18 +66,15 @@ public class ParIDCategoriaIDTarefa implements RegistroArvoreBMais<ParIDCategori
     //     } // if
     // } // compareTo ( )
 
-    public int compareTo(ParIDCategoriaIDTarefa other) {
-        if( this.idCategoria == -1 || this.idTarefa == -1 ) {
-            return 0;
+    public int compareTo(ParIDCategoriaIDTarefa other) 
+    {
+        if( this.idTarefa == -1 || other.idCategoria == -1 ) {
+            return this.idCategoria + other.idCategoria;
+        } else if( this.idCategoria != other.idCategoria ) {
+            return this.idCategoria - other.idCategoria;
+        } else {
+            return ((this.idTarefa == -1) ? 0 : this.idTarefa - other.idTarefa);
         } // if
-        if( other.idCategoria == -1 || other.idTarefa == -1 ) {
-            return 0;
-        } // if
-        int result = this.idCategoria - other.idCategoria;
-        if( result == 0 ) {
-            result = this.idTarefa - other.idTarefa;
-        } // if
-        return result;
     } // compareTo ( )
 
     public short size( ) {

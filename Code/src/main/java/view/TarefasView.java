@@ -51,7 +51,6 @@ public class TarefasView extends PrincipalView
         System.out.println("2 - Incluir              ");
         System.out.println("3 - Alterar              ");
         System.out.println("4 - Excluir              ");
-        System.out.println("5 - Buscar por Categoria ");
         System.out.println("0 - Voltar               ");
         System.out.print  ("Opção: "                  );
     } // opcoes_menu ( )
@@ -73,9 +72,6 @@ public class TarefasView extends PrincipalView
                 break;
             case 4:
                 excluirTarefa( );
-                break;
-            case 5:
-                buscarTarefaPorCategoria( );
                 break;
 
             default:
@@ -148,10 +144,10 @@ public class TarefasView extends PrincipalView
         } // try-catch
     } // incluirTarefa ( )
 
-    public static void buscarTarefa( ) 
+    private static void buscarPorID( ) 
     {
-        System.out.println( "\n> Buscar Tarefa:" );
-    
+        System.out.println( "\n> Buscar Tarefa por ID:" );
+
         try 
         {
             if( IO.listarTarefas( arqTarefas ) ) 
@@ -173,6 +169,117 @@ public class TarefasView extends PrincipalView
                     System.out.println( RED + "Operação cancelada!" + RESET );
                 } // if
             } // if
+
+        } catch( Exception e ) {
+            System.out.println( RED + "Erro ao buscar tarefa por identificador!" + RESET );
+        } // try-catch
+    } // buscarPorID ( )
+
+    private static void buscarPorNome( )
+    {
+        System.out.println( "\n> Buscar Tarefa por Nome Completo:" );
+
+        try 
+        {
+            System.out.print( "Nome da Tarefa: " );
+            String nome = console.nextLine( );
+    
+            if( nome.length() > 0 ) 
+            {
+                ArrayList<Tarefa> tarefas = arqTarefas.readAll( );
+                
+                boolean encontrou = false;
+                int tam = tarefas.size( );
+                for( int i = 0; i < tam && !encontrou; i++ ) 
+                {
+                    Tarefa tarefa = tarefas.get( i );
+                    if( tarefa.getNome().equals( nome ) ) 
+                    {
+                        System.out.println( GREEN + tarefa + RESET );
+                        encontrou = true;
+                    } // if
+                } // for
+    
+                if( !encontrou ) {
+                    System.out.println( RED + "Tarefa não encontrada." + RESET );
+                } // if
+    
+            } else {
+                System.out.println( RED + "Operação cancelada!" + RESET );
+            } // if
+
+        } catch( Exception e ) {
+            System.out.println( RED + "Erro ao buscar tarefa por nome completo!" + RESET );
+        } // try-catch
+    } // buscarPorNome ( )
+
+    private static void buscarPorCategoria( )
+    {
+        System.out.println( "\n> Buscar Tarefa por Categoria:" );
+
+        try 
+        {
+            if( IO.listarCategorias( arqCategorias ) )
+            {
+                System.out.print( "ID da Categoria: " );
+                int idCategoria = Integer.parseInt( console.nextLine( ) );
+                
+                if( idCategoria > 0 ) 
+                {
+                    ArrayList<Tarefa> tarefas = arqTarefas.readAll( idCategoria );
+    
+                    if( tarefas.isEmpty( ) ) {
+                        System.out.println( RED + "Não há tarefas cadastradas!" + RESET );
+                    } 
+                    else 
+                    {
+                        System.out.println( "\nLista de tarefas:" );
+                        for( Tarefa tarefa : tarefas ) {
+                            System.out.println( GREEN + tarefa + RESET );
+                        } // for
+                    } // if
+    
+                } else {
+                    System.out.println( RED + "ID inválido!" + RESET );
+                } // if
+            } // if
+
+        } catch( Exception e ) {
+            System.out.println( RED + "Erro buscar tarefa por categoria!" + RESET );
+        } // try-catch
+    } // buscarPorCategoria ( )
+
+    public static void buscarTarefa( ) 
+    {
+        System.out.println( "\n> Buscar Tarefa:" );
+    
+        try 
+        {
+            System.out.println( "1. Buscar por ID            " );
+            System.out.println( "2. Buscar por Nome Completo " );
+            System.out.println( "3. Buscar por Categoria     " );
+            System.out.println( "4. Buscar por Rótulo        " );
+            System.out.println( "0. Cancelar                 " );
+            System.out.print  ( "Opção: " );
+
+            int opcao = Integer.parseInt( console.nextLine( ) );
+
+            switch ( opcao ) 
+            {
+                case 0:
+                    break;
+                case 1:
+                    buscarPorID( );
+                    break;
+                case 2:
+                    buscarPorNome( );
+                    break;
+                case 3:
+                    buscarPorCategoria( );
+                    break;
+                default:
+                    break;
+            } // switch
 
         } catch( Exception e ) {
             System.out.println( RED + "Erro ao buscar tarefa!" + RESET );
@@ -277,41 +384,5 @@ public class TarefasView extends PrincipalView
             System.out.println( RED + "Erro ao excluir tarefa!" + RESET );
         } // try-catch
     } // excluirTarefa ( )
-
-    public static void buscarTarefaPorCategoria( )
-    {
-        System.out.println( "\n> Buscar Tarefa por Categoria:" );
-
-        try 
-        {
-            if( IO.listarCategorias( arqCategorias ) )
-            {
-                System.out.print( "ID da Categoria: " );
-                int idCategoria = Integer.parseInt( console.nextLine( ) );
-                
-                if( idCategoria > 0 ) 
-                {
-                    ArrayList<Tarefa> tarefas = arqTarefas.readAll( idCategoria );
-    
-                    if( tarefas.isEmpty( ) ) {
-                        System.out.println( RED + "Não há tarefas cadastradas!" + RESET );
-                    } 
-                    else 
-                    {
-                        System.out.println( "\nLista de tarefas:" );
-                        for( Tarefa tarefa : tarefas ) {
-                            System.out.println( GREEN + tarefa + RESET );
-                        } // for
-                    } // if
-    
-                } else {
-                    System.out.println( RED + "ID inválido!" + RESET );
-                } // if
-            } // if
-
-        } catch( Exception e ) {
-            System.out.println( RED + "Erro no sistema. Não foi possível buscar tarefa!" + RESET );
-        } // try-catch
-    } // buscarTarefa ( )
 
 } // TarefasView
