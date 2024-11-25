@@ -9,49 +9,44 @@ import java.io.IOException;
 import interfaces.RegistroArvoreBMais;
 import util.IO;
 
-/**
- *  ParNomeIDCategoria: Classe que representa um par de ID Categoria e Nome.
- *  Implementa a interface RegistroArvoreBMais.
- */
-public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategoria> 
+public class ParNomeIDRotulo implements RegistroArvoreBMais<ParNomeIDRotulo> 
 {
     private String nome;
-    private int idCategoria;
+    private int idRotulo;
     private final short TAMANHO = 30; // tamanho total em bytes
     private final short TAM_NOME = 26; // tamanho do nome em bytes
 
-    public ParNomeIDCategoria( ) 
+    public ParNomeIDRotulo( ) 
     {
         this( "", -1 );
-    } // ParNomeIDCategoria ( )
+    } // ParNomeIDRotulo ( )
 
-    public ParNomeIDCategoria( String nome ) 
+    public ParNomeIDRotulo( String nome ) 
     {
         this( nome, -1 );
-    } // ParNomeIDCategoria ( )
+    } // ParNomeIDRotulo ( )
 
-    public ParNomeIDCategoria( String nome, int idCategoria ) 
+    public ParNomeIDRotulo( String nome, int idRotulo ) 
     {
         if( nome.getBytes().length > TAM_NOME )
             throw new IllegalArgumentException("Nome extenso demais. Diminua o número de caracteres.");
         this.nome = nome;
-        this.idCategoria = idCategoria;
-    } // ParNomeIDCategoria ( )
+        this.idRotulo = idRotulo;
+    } // ParNomeIDRotulo ( )
 
-    public int getIDCategoria( ) {
-        return idCategoria;
+    public int getIDRotulo( ) {
+        return idRotulo;
     } // getId ( )
 
     public String getNome( ) {
         return nome;
     } // getNome ( )
 
-    @Override
-    public ParNomeIDCategoria clone( ) 
+    public ParNomeIDRotulo clone( ) 
     {
-        ParNomeIDCategoria parNomeId = null;
+        ParNomeIDRotulo parNomeId = null;
         try {
-            parNomeId = new ParNomeIDCategoria(this.nome, this.idCategoria);
+            parNomeId = new ParNomeIDRotulo(this.nome, this.idRotulo);
         } // try
         catch ( Exception e ) {
             parNomeId = null;
@@ -60,12 +55,16 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
         return parNomeId;
     } // clone ( )
 
-    public int compareTo( ParNomeIDCategoria parNomeId )
+    public String toString( ) {
+        return ( "("+ this.nome +", "+ String.format( "%3d" ,this.idRotulo) + ")" );
+    } // toString ( )
+
+    public int compareTo( ParNomeIDRotulo parNomeId )
     {
-        if( this.nome.equals(" ") || this.idCategoria == -1 ) {
+        if( this.nome.equals(" ") || this.idRotulo == -1 ) {
             return 0;
         } // if
-        if( parNomeId.nome.equals(" ") || parNomeId.idCategoria == -1 ) {
+        if( parNomeId.nome.equals(" ") || parNomeId.idRotulo == -1 ) {
             return 0;
         } // if
         if( this.nome == null || parNomeId.nome == null ) {
@@ -74,21 +73,18 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
         return IO.strnormalize( this.nome ).compareTo( IO.strnormalize( parNomeId.nome ) );
     } // compareTo ( )
 
-    public short size( ) {
+    public short size( ) 
+    {
         return this.TAMANHO;
     } // size ( )
 
-    public String toString( ) {
-        return "(" + this.nome + ";" + String.format("%3d", this.idCategoria) + ")";
-    } // toString ( )
-
     public byte[] toByteArray( ) throws IOException 
     {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        DataOutputStream dos = new DataOutputStream(baos);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream( );
+        DataOutputStream dos = new DataOutputStream( baos );
 
         byte[] ba = new byte[TAM_NOME];
-        byte[] baNome = this.nome.getBytes();
+        byte[] baNome = nome.getBytes();
         int i = 0;
         while( i < baNome.length ) {
             ba[i] = baNome[i];
@@ -100,21 +96,21 @@ public class ParNomeIDCategoria implements RegistroArvoreBMais<ParNomeIDCategori
         } // while
 
         dos.write( ba );
-        dos.writeInt(this.idCategoria);
-        
-        return ( baos.toByteArray() );
+        dos.writeInt( idRotulo );
+
+        return ( baos.toByteArray( ) );
     } // toByteArray ( )
 
     public void fromByteArray( byte[] ba ) throws IOException 
     {
-        ByteArrayInputStream bais = new ByteArrayInputStream(ba);
-        DataInputStream dis = new DataInputStream(bais);
-    
-        byte[] b = new byte[TAM_NOME];
-        dis.read(b);
+        ByteArrayInputStream bais = new ByteArrayInputStream( ba );
+        DataInputStream dis = new DataInputStream( bais );
         
-        this.nome = (new String(b)).trim();
-        this.idCategoria = dis.readInt();
+        byte[] baNome = new byte[TAM_NOME];
+        dis.read( baNome );
+
+        this.nome = (new String( baNome )).trim();
+        this.idRotulo = dis.readInt( );
     } // fromByteArray ( )
-    
-} // ParNomeIDCategoria
+
+} // ParNomeIDRotulo

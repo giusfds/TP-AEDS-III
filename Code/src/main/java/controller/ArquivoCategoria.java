@@ -81,7 +81,7 @@ public class ArquivoCategoria extends Arquivo<Categoria>
                     arvore.create( new ParNomeIDCategoria( novaCategoria.getNome(), novaCategoria.getId() ) );
                 } // if
             } catch( Exception e ) {
-                System.out.println( "Erro ao atualizar o índice: " + e.getMessage( ) );
+                System.out.println( "Erro ao atualizar categoria no índice: " + e.getMessage( ) );
             } // try-catch
         } // if
         return ( result );
@@ -102,7 +102,7 @@ public class ArquivoCategoria extends Arquivo<Categoria>
                     arvore.delete( new ParNomeIDCategoria( categoria.getNome(), categoria.getId() ) );
                     result = true;
                 } catch ( Exception e ) {
-                    System.out.println("Erro ao deletar do índice: " + e.getMessage());
+                    System.out.println("Erro ao deletar categoria no índice: " + e.getMessage());
                 } // try-catch
             } // if
         } // if

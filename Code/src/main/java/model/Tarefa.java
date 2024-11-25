@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -8,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 
 import interfaces.Registro;
+
 
 /**
  *  Classe Tarefa
@@ -19,50 +21,36 @@ import interfaces.Registro;
  */
 public class Tarefa implements Registro 
 {
-    private int       id;
-    private String    nome;
-    private LocalDate dataCriacao;
-    private LocalDate dataConclusao;
-    private byte      status;
-    private byte      prioridade;
-    private int       idCategoria;
+    private int                id;
+    private String             nome;
+    private LocalDate          dataCriacao;
+    private LocalDate          dataConclusao;
+    private byte               status;
+    private byte               prioridade;
+    private int                idCategoria;
+    private ArrayList<Integer> idRotulos;
 
     public Tarefa( ) {
-        this(-1, "", LocalDate.now(), LocalDate.now(), (byte) -1, (byte) -1);
+        this(-1, "", LocalDate.now(), LocalDate.now(), (byte) -1, (byte) -1, -1);
+        this.idRotulos = new ArrayList<>();
     } // Tarefa ( )
 
-    public Tarefa( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) 
-    {
-        this.nome          = nome;
-        this.dataCriacao   = dataCriacao;
-        this.dataConclusao = dataConclusao;
-        this.status        = status;
-        this.prioridade    = prioridade;
+    public Tarefa( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) {
+        this(-1, nome, dataCriacao, dataConclusao, status, prioridade, -1);
+        this.idRotulos = new ArrayList<>();
     } // Tarefa ( )
 
-    public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade )
-    {
-        this.id            = id;
-        this.nome          = nome;
-        this.dataCriacao   = dataCriacao;
-        this.dataConclusao = dataConclusao;
-        this.status        = status;
-        this.prioridade    = prioridade;
+    public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade ) {
+        this(id, nome, dataCriacao, dataConclusao, status, prioridade, -1);
+        this.idRotulos = new ArrayList<>();
     } // Tarefa ( )
 
-    public Tarefa( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, int idCategoria ) 
-    {
-        this.nome          = nome;
-        this.dataCriacao   = dataCriacao;
-        this.dataConclusao = dataConclusao;
-        this.status        = status;
-        this.prioridade    = prioridade;
-        this.idCategoria   = idCategoria;
+    public Tarefa( String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, int idCategoria ) {
+        this(-1, nome, dataCriacao, dataConclusao, status, prioridade, idCategoria);
+        this.idRotulos = new ArrayList<>();
     } // Tarefa ( )
 
-    public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, 
-                    int idCategoria )
-    {
+    public Tarefa( int id, String nome, LocalDate dataCriacao, LocalDate dataConclusao, byte status, byte prioridade, int idCategoria ) {
         this.id            = id;
         this.nome          = nome;
         this.dataCriacao   = dataCriacao;
@@ -70,6 +58,7 @@ public class Tarefa implements Registro
         this.status        = status;
         this.prioridade    = prioridade;
         this.idCategoria   = idCategoria;
+        this.idRotulos     = new ArrayList<>( );
     } // Tarefa ( )
     
     public int getId( ) {
@@ -128,6 +117,14 @@ public class Tarefa implements Registro
         this.idCategoria = idCategoria;
     } // setIdCategoria ( )
 
+    public ArrayList<Integer> getIdRotulos( ) {
+        return this.idRotulos;
+    } // getIdRotulos ( )
+
+    public void setIdRotulos( ArrayList<Integer> idRotulos ) {
+        this.idRotulos = idRotulos;
+    } // setIdRotulos ( )
+
     private static String getStatusString( byte status ) 
     {
         switch( status ) 
@@ -167,7 +164,7 @@ public class Tarefa implements Registro
                 "\nData de Conclusao: " + getDataString( this.dataConclusao )    +
                 "\nStatus...........: " + getStatusString( this.status )         +
                 "\nPrioridade.......: " + getPrioridadeString( this.prioridade ) +
-                "\nCategoria........: " + this.idCategoria
+                "\nCategoria........: " + this.idCategoria                       
                 );
     } // toString ( )
 
@@ -184,6 +181,10 @@ public class Tarefa implements Registro
             dos.writeByte(this.status); // status
             dos.writeByte(this.prioridade); // prioridade
             dos.writeInt (this.idCategoria); // idCategoria
+            dos.writeInt (this.idRotulos.size()); // quantidade de rótulos
+            for( int i = 0; i < this.idRotulos.size(); i++ ) {
+                dos.writeInt( this.idRotulos.get( i ) ); // id do rótulo
+            } // for
         } catch( IOException e ) {
             System.out.println( "Erro ao transformar objeto tarefa em byte[]: " + e.getMessage( ) );
         } // try-catch
@@ -203,6 +204,11 @@ public class Tarefa implements Registro
             this.status        = dis.readByte();
             this.prioridade    = dis.readByte();
             this.idCategoria   = dis.readInt();
+            int n = dis.readInt();
+            this.idRotulos = new ArrayList<Integer>( );
+            for( int i = 0; i < n; i++ ) {
+                this.idRotulos.add( dis.readInt( ) );
+            } // for
         } catch( IOException e ) {
             System.out.println("Erro ao converter byte[] em objeto tarefa: " + e.getMessage( ) );
         } // try-catch

@@ -1,15 +1,19 @@
 package util;
 
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import model.Categoria;
 import model.Tarefa;
+import model.Rotulo;
 import controller.ArquivoCategoria;
 import controller.ArquivoTarefa;
+import controller.ArquivoRotulo;
 
 /**
  *  Classe de utilidade para entrada e saída de dados no console.
@@ -198,5 +202,38 @@ public class IO
         } // try-catch
         return ( result );
     } // listarCategorias ( )
+
+    public static boolean listarRotulos( ArquivoRotulo arqRotulos )
+    {
+        boolean result = false;
+        try 
+        {
+            ArrayList<Rotulo> lista = arqRotulos.readAll( );
+
+            if( lista.isEmpty( ) ) {
+                System.out.println( RED + "Nenhum rótulo cadastrado." + RESET );
+            } 
+            else 
+            {
+                System.out.println( "\nLista de rótulos:" );
+                int tam = lista.size( );
+                for( int i = 0; i < tam; i++ ) {
+                    System.out.println( lista.get(i) );
+                } // for
+                result = true;
+            } // if
+
+        } catch( Exception e ) {
+            System.out.println( RED + "Erro no sistema. Não foi possível listar os rótulos!" + RESET );
+        } // try-catch
+        return ( result );
+    } // listarRotulos ( )
+
+    public static String strnormalize( String str ) 
+    {
+        String nfdNormalizedString = Normalizer.normalize(str, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(nfdNormalizedString).replaceAll("").toLowerCase();
+    } // strnormalize ( )
 
 } // IO

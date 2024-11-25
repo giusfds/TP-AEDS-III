@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import controller.ArquivoCategoria;
 import controller.ArquivoTarefa;
+import controller.ArquivoRotulo;
 import model.Tarefa;
 import util.IO;
 
@@ -19,11 +20,13 @@ public class TarefasView extends PrincipalView
 {
     private static ArquivoTarefa arqTarefas;
     private static ArquivoCategoria arqCategorias;
+    private static ArquivoRotulo arqRotulos;
 
     public TarefasView( ) throws Exception 
     {
         arqTarefas = new ArquivoTarefa();
         arqCategorias = new ArquivoCategoria();
+        arqRotulos = new ArquivoRotulo();
     } // MenuTarefas ( )
 
     public void menu( ) 
@@ -89,6 +92,7 @@ public class TarefasView extends PrincipalView
 
             if( nome.length( ) > 0 )
             {
+
                 LocalDate dataCriacao = IO.lerData( "\nData de Criação (dd/MM/yyyy): " );
                 LocalDate dataConclusao = IO.lerData( "\nData de Conclusão (dd/MM/yyyy): " );
                 byte status = IO.lerOpcaoNumerica( "Status", 5 );
@@ -152,8 +156,7 @@ public class TarefasView extends PrincipalView
         {
             if( IO.listarTarefas( arqTarefas ) ) 
             {
-                System.out.print( "ID da Tarefa: " );
-                String input = console.nextLine( );
+                String input = IO.lerString( "ID da Tarefa: ", 1, 5 );
     
                 if( input.length() > 0 ) 
                 {
@@ -181,8 +184,7 @@ public class TarefasView extends PrincipalView
 
         try 
         {
-            System.out.print( "Nome da Tarefa: " );
-            String nome = console.nextLine( );
+            String nome = IO.lerString( "\nNome da Tarefa: ", 3, 50 );
     
             if( nome.length() > 0 ) 
             {
@@ -248,6 +250,52 @@ public class TarefasView extends PrincipalView
             System.out.println( RED + "Erro buscar tarefa por categoria!" + RESET );
         } // try-catch
     } // buscarPorCategoria ( )
+
+    public static void buscarPorRotulo( )
+    {
+        System.out.println( "\n> Buscar Tarefa por Rótulo:" );
+
+        try 
+        {
+            // if( IO.listarRotulos( arqRotulos ) ) 
+            if( true )
+            {
+                System.out.print( "ID do Rótulo: " );
+                int idRotulo = Integer.parseInt( console.nextLine( ) );
+                
+                if( idRotulo > 0 ) 
+                {
+                    ArrayList<Tarefa> tarefas = arqTarefas.readAll( );
+                    ArrayList<Tarefa> tarefasComRotulo = new ArrayList<>( );
+    
+                    for( Tarefa tarefa : tarefas ) 
+                    {
+                        if( tarefa.getIdRotulos( ).contains( idRotulo ) ) 
+                        {
+                            tarefasComRotulo.add( tarefa );
+                        } // if
+                    } // for
+    
+                    if( tarefasComRotulo.isEmpty( ) ) {
+                        System.out.println( RED + "Não há tarefas cadastradas com esse rótulo!" + RESET );
+                    } 
+                    else 
+                    {
+                        System.out.println( "\nLista de tarefas:" );
+                        for( Tarefa tarefa : tarefasComRotulo ) {
+                            System.out.println( GREEN + tarefa + RESET );
+                        } // for
+                    } // if
+    
+                } else {
+                    System.out.println( RED + "ID inválido!" + RESET );
+                } // if
+            } // if
+
+        } catch( Exception e ) {
+            System.out.println( RED + "Erro ao buscar tarefa por rótulo!" + RESET );
+        } // try-catch
+    }
 
     public static void buscarTarefa( ) 
     {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import model.ArvoreBMais;
 import model.ParIDCategoriaIDTarefa;
+import model.ParIDRotuloIDTarefa;
 import model.Tarefa;
 
 /**
@@ -19,17 +20,28 @@ import model.Tarefa;
  */
 public class ArquivoTarefa extends Arquivo<Tarefa> 
 {
-    ArvoreBMais<ParIDCategoriaIDTarefa> arvore;
+    ArvoreBMais<ParIDCategoriaIDTarefa> arvoreCategoriaTarefa;
+    ArvoreBMais<ParIDRotuloIDTarefa> arvoreRotuloTarefa;
+    IndiceInvertido indiceInvertido;
 
     public ArquivoTarefa( ) throws Exception 
     {
         super( "Tarefas.db", Tarefa.class.getConstructor() );
-        arvore = new ArvoreBMais<> 
+        arvoreCategoriaTarefa = new ArvoreBMais<> 
         ( 
             ParIDCategoriaIDTarefa.class.getConstructor(),
             5, 
-            ".\\Code\\src\\main\\data\\Tarefas.db.arvore.idx" 
+            ".\\Code\\src\\main\\data\\Tarefas.db.arvoreCategoria.idx" 
         );
+
+        arvoreRotuloTarefa = new ArvoreBMais<>
+        (
+            ParIDRotuloIDTarefa.class.getConstructor(),
+            5,
+            ".\\Code\\src\\main\\data\\Tarefas.db.arvoreRotulo.idx"
+        );
+
+        indiceInvertido = new IndiceInvertido( );
     } // ArquivoTarefa ( )
 
     @Override
@@ -37,7 +49,16 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
     {
         int id = super.create( tarefa );
         try {
-            arvore.create( new ParIDCategoriaIDTarefa( tarefa.getIdCategoria(), tarefa.getId() ) );
+            arvoreCategoriaTarefa.create( new ParIDCategoriaIDTarefa( tarefa.getIdCategoria(), tarefa.getId() ) );
+
+            ArrayList<Integer> rotulos = new ArrayList<>( );
+            for( int idRotulo = 1; idRotulo <= rotulos.size( ); idRotulo++ ) {
+                rotulos.add( idRotulo );
+                arvoreRotuloTarefa.create( new ParIDRotuloIDTarefa( idRotulo, tarefa.getId( ) ) );
+            } // for
+            tarefa.setIdRotulos(rotulos);
+            indiceInvertido.insert( tarefa.getNome( ), tarefa.getId( ) );
+
         } catch( Exception e ) {
             System.out.print( "Erro ao criar tarefa no índice: " + e.getMessage( ) );
         } // try-catch
@@ -56,9 +77,9 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
             ArrayList<ParIDCategoriaIDTarefa> listaTarefas;
             
             if( idCategoria == -1 ) {
-                listaTarefas = arvore.read( new ParIDCategoriaIDTarefa(-1, -1) );
+                listaTarefas = arvoreCategoriaTarefa.read( new ParIDCategoriaIDTarefa(-1, -1) );
             } else {
-                listaTarefas = arvore.read( new ParIDCategoriaIDTarefa(idCategoria, -1) );
+                listaTarefas = arvoreCategoriaTarefa.read( new ParIDCategoriaIDTarefa(idCategoria, -1) );
             } // if
 
             for( ParIDCategoriaIDTarefa parIdId : listaTarefas ) {
@@ -83,8 +104,19 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
             {
                 if( novaTarefa.getId() != tarefaAntiga.getId() ) 
                 {
-                    arvore.delete( new ParIDCategoriaIDTarefa( tarefaAntiga.getIdCategoria(), tarefaAntiga.getId() ) );
-                    arvore.create( new ParIDCategoriaIDTarefa( novaTarefa.getIdCategoria(), novaTarefa.getId() ) );
+                    arvoreCategoriaTarefa.delete( new ParIDCategoriaIDTarefa( tarefaAntiga.getIdCategoria(), tarefaAntiga.getId() ) );
+                    arvoreCategoriaTarefa.create( new ParIDCategoriaIDTarefa( novaTarefa.getIdCategoria(), novaTarefa.getId() ) );
+                } // if
+
+                if( novaTarefa.getNome( ).compareTo( tarefaAntiga.getNome( ) ) != 0 ) 
+                {
+                    for( int idRotulo : tarefaAntiga.getIdRotulos( ) ) {
+                        arvoreRotuloTarefa.delete( new ParIDRotuloIDTarefa( idRotulo, tarefaAntiga.getId( ) ) );
+                    } // for
+                    for( int idRotulo : novaTarefa.getIdRotulos( ) ) {
+                        arvoreRotuloTarefa.create( new ParIDRotuloIDTarefa( idRotulo, novaTarefa.getId( ) ) );
+                    } // for
+                    indiceInvertido.update( tarefaAntiga.getNome( ), novaTarefa.getNome( ), novaTarefa.getId( ) );
                 } // if
             } catch( Exception e ) {
                 System.out.println( "Erro ao atualizar o índice: " + e.getMessage( ) );
@@ -102,7 +134,15 @@ public class ArquivoTarefa extends Arquivo<Tarefa>
         {
             try 
             {
-                arvore.delete( new ParIDCategoriaIDTarefa( tarefa.getIdCategoria(), id ) );
+                arvoreCategoriaTarefa.delete( new ParIDCategoriaIDTarefa( tarefa.getIdCategoria(), id ) );
+                
+                ArrayList<Integer> rotulos = tarefa.getIdRotulos( );
+                for( int idRotulo : rotulos ) {
+                    arvoreRotuloTarefa.delete( new ParIDRotuloIDTarefa( idRotulo, id ) );
+                } // for
+
+                indiceInvertido.delete( tarefa.getNome( ), id );
+                
                 result = true;
             } catch( Exception e ) {
                 System.out.println( "Erro ao deletar tarefa do índice: " + e.getMessage( ) );

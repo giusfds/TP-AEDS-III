@@ -9,71 +9,71 @@ import java.io.IOException;
 import interfaces.RegistroArvoreBMais;
 
 /**
- *  ParIDCategoriaIDTarefa: Classe que representa um par de ID Categoria e ID Tarefa.
+ *  ParIDRotuloIDTarefa: Classe que representa um par de ID Rotulo e ID Tarefa.
  *  Implementa a interface RegistroArvoreBMais.
  *  <p>Extende a classe RegistroArvoreBMais.</p>
  *  
  *  @see RegistroArvoreBMais
- *  @see ParIDCategoriaIDTarefa
+ *  @see ParIDRotuloIDTarefa
  *  @see ArvoreBMais
  */
-public class ParIDCategoriaIDTarefa implements RegistroArvoreBMais<ParIDCategoriaIDTarefa> 
+public class ParIDRotuloIDTarefa implements RegistroArvoreBMais<ParIDRotuloIDTarefa> 
 {
-    private int idCategoria; // chave
+    private int idRotulo; // chave
     private int idTarefa;    // valor
     private final short TAMANHO = 8;  // tamanho em bytes
 
-    public ParIDCategoriaIDTarefa( ) {
+    public ParIDRotuloIDTarefa( ) {
         this(-1, -1);
-    } // ParIDCategoriaIDTarefa ( )
+    } // ParIDRotuloIDTarefa ( )
 
-    public ParIDCategoriaIDTarefa( int idCategoria ) {
-        this( idCategoria, -1 );
-    } // ParIDCategoriaIDTarefa ( )
+    public ParIDRotuloIDTarefa( int idRotulo ) {
+        this( idRotulo, -1 );
+    } // ParIDRotuloIDTarefa ( )
 
-    public ParIDCategoriaIDTarefa( int idCategoria, int idTarefa ) 
+    public ParIDRotuloIDTarefa( int idRotulo, int idTarefa ) 
     {
-        this.idCategoria = idCategoria;
+        this.idRotulo = idRotulo;
         this.idTarefa = idTarefa;
-    } // ParIDCategoriaIDTarefa ( )
+    } // ParIDRotuloIDTarefa ( )
 
-    public int getIDCategoria( ) {
-        return idCategoria;
-    } // getIDCategoria ( )
+    public int getIDRotulo( ) {
+        return idRotulo;
+    } // getIDRotulo ( )
 
     public int getIDTarefa( ) {
         return idTarefa;
     } // getIDTarefa ( )
 
     @Override
-    public ParIDCategoriaIDTarefa clone( )
+    public ParIDRotuloIDTarefa clone( )
     {
-        ParIDCategoriaIDTarefa clone = null;
+        ParIDRotuloIDTarefa clone = null;
         try {
-            clone = new ParIDCategoriaIDTarefa( this.idCategoria, this.idTarefa );
+            clone = new ParIDRotuloIDTarefa( this.idRotulo, this.idTarefa );
         } catch( Exception e ) {
             e.printStackTrace( );
         } // try-catch
         return clone;
     } // clone ( )
 
-    // public int compareTo( ParIDCategoriaIDTarefa other )
+    // public int compareTo( ParIDRotuloIDTarefa other )
     // {
-    //     if( this.idCategoria != other.idCategoria ) {
-    //         return this.idCategoria - other.idCategoria;
+    //     if( this.idRotulo != other.idRotulo ) {
+    //         return this.idRotulo - other.idRotulo;
     //     } else {
     //         return this.idTarefa == -1 ? 0 : this.idTarefa - other.idTarefa;
     //     } // if
     // } // compareTo ( )
 
-    public int compareTo( ParIDCategoriaIDTarefa other ) 
+    public int compareTo( ParIDRotuloIDTarefa other ) 
     {
-        if( this.idCategoria == -1 || other.idCategoria == -1 ) {
-            return 0;                                      // Busca ampla, ignora categoria
-        } else if( this.idCategoria != other.idCategoria ) {
-            return this.idCategoria - other.idCategoria;   // Compara categorias
+        if( this.idRotulo == -1 || other.idRotulo == -1 ) {
+            return 0;                                      // Busca ampla, ignora Rotulo
+        } else if( this.idRotulo != other.idRotulo ) {
+            return this.idRotulo - other.idRotulo;         // Compara Rotulos
         } else if( this.idTarefa == -1 || other.idTarefa == -1 ) {
-            return 0;                                      // Busca específica por categoria, ignora tarefa
+            return 0;                                      // Busca específica por Rotulo, ignora tarefa
         } else {
             return this.idTarefa - other.idTarefa;         // Compara tarefas
         } // if
@@ -84,7 +84,7 @@ public class ParIDCategoriaIDTarefa implements RegistroArvoreBMais<ParIDCategori
     } // size ( )
 
     public String toString( ) {
-        return  String.format("%3d", this.idCategoria) + ";" + String.format("%3d", this.idTarefa);
+        return String.format("%3d", this.idRotulo) + ";" + String.format("%3d", this.idTarefa);
     } // toString ( )
 
     public byte[] toByteArray( ) throws IOException 
@@ -92,7 +92,7 @@ public class ParIDCategoriaIDTarefa implements RegistroArvoreBMais<ParIDCategori
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(baos);
 
-        dos.writeInt(this.idCategoria);
+        dos.writeInt(this.idRotulo);
         dos.writeInt(this.idTarefa);
 
         return (baos.toByteArray());
@@ -103,8 +103,8 @@ public class ParIDCategoriaIDTarefa implements RegistroArvoreBMais<ParIDCategori
         ByteArrayInputStream bais = new ByteArrayInputStream(ba);
         DataInputStream dis = new DataInputStream(bais);
     
-        this.idCategoria = dis.readInt( );
-        this.idTarefa    = dis.readInt();
+        this.idRotulo = dis.readInt( );
+        this.idTarefa = dis.readInt( );
     } // fromByteArray ( )
 
-} // ParIDCategoriaIDTarefa
+} // ParIDRotuloIDTarefa
