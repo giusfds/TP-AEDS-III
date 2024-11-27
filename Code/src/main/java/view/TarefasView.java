@@ -54,11 +54,12 @@ public class TarefasView extends PrincipalView
         System.out.println("2 - Incluir              ");
         System.out.println("3 - Alterar              ");
         System.out.println("4 - Excluir              ");
+        System.out.println("5 - Gerenciar Rótulos    ");
         System.out.println("0 - Voltar               ");
         System.out.print  ("Opção: "                  );
     } // opcoes_menu ( )
 
-    protected static void executar_opcao( int opcao ) 
+    protected static void executar_opcao( int opcao ) throws Exception
     {
         switch( opcao ) 
         {
@@ -76,6 +77,9 @@ public class TarefasView extends PrincipalView
             case 4:
                 excluirTarefa( );
                 break;
+            case 5:
+                (new RotuloView( )).menu( );
+                break;
 
             default:
                 System.out.println( RED + "Opção inválida!" + RESET );
@@ -88,7 +92,7 @@ public class TarefasView extends PrincipalView
         Tarefa tarefa = null;
         try
         {
-            String nome = IO.lerString( "\nNome: ", 3, 50 );
+            String nome = IO.lerString( "\nNome: ", 3, 120 );
 
             if( nome.length( ) > 0 )
             {
@@ -257,38 +261,30 @@ public class TarefasView extends PrincipalView
 
         try 
         {
-            // if( IO.listarRotulos( arqRotulos ) ) 
-            if( true )
+            if( IO.listarRotulos( arqRotulos ) ) 
             {
                 System.out.print( "ID do Rótulo: " );
-                int idRotulo = Integer.parseInt( console.nextLine( ) );
+                String input = console.nextLine( );
                 
-                if( idRotulo > 0 ) 
+                if( input.length() > 0 ) 
                 {
-                    ArrayList<Tarefa> tarefas = arqTarefas.readAll( );
-                    ArrayList<Tarefa> tarefasComRotulo = new ArrayList<>( );
+                    int idRotulo = Integer.parseInt( input );
+
+                    ArrayList<Tarefa> tarefas = arqTarefas.readAllByRotulo( idRotulo );
     
-                    for( Tarefa tarefa : tarefas ) 
-                    {
-                        if( tarefa.getIdRotulos( ).contains( idRotulo ) ) 
-                        {
-                            tarefasComRotulo.add( tarefa );
-                        } // if
-                    } // for
-    
-                    if( tarefasComRotulo.isEmpty( ) ) {
-                        System.out.println( RED + "Não há tarefas cadastradas com esse rótulo!" + RESET );
+                    if( tarefas.isEmpty( ) ) {
+                        System.out.println( RED + "Não há tarefas cadastradas!" + RESET );
                     } 
                     else 
                     {
                         System.out.println( "\nLista de tarefas:" );
-                        for( Tarefa tarefa : tarefasComRotulo ) {
+                        for( Tarefa tarefa : tarefas ) {
                             System.out.println( GREEN + tarefa + RESET );
                         } // for
                     } // if
-    
+
                 } else {
-                    System.out.println( RED + "ID inválido!" + RESET );
+                    System.out.println( RED + "Operação Cancelada!" + RESET );
                 } // if
             } // if
 
@@ -325,7 +321,11 @@ public class TarefasView extends PrincipalView
                 case 3:
                     buscarPorCategoria( );
                     break;
+                case 4:
+                    buscarPorRotulo( );
+                    break;
                 default:
+                    System.out.println( RED + "Opção inválida!" + RESET );
                     break;
             } // switch
 
@@ -363,8 +363,6 @@ public class TarefasView extends PrincipalView
                             novaTarefa.setId( id );
                             arqTarefas.update( novaTarefa );
                             System.out.println( GREEN + "Tarefa alterada com sucesso." + RESET );
-                        } else {
-                            System.out.println( RED + "Operação cancelada!" + RESET );
                         } // if
 
                     } else {
