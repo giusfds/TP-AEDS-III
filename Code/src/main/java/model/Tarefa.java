@@ -125,6 +125,14 @@ public class Tarefa implements Registro
         this.idRotulos = idRotulos;
     } // setIdRotulos ( )
 
+    public void addIdRotulo( int idRotulo ) {
+        this.idRotulos.add( idRotulo );
+    } // addIdRotulo ( )
+
+    public void removeIdRotulo( int idRotulo ) {
+        this.idRotulos.remove( idRotulo );
+    } // removeIdRotulo ( )
+
     private static String getStatusString( byte status ) 
     {
         switch( status ) 
