@@ -147,6 +147,26 @@ public class IO
         return idCategoria;
     } // lerIdCategoria ( )
 
+    public static int lerIdRotulo( ArquivoRotulo arqRotulos ) 
+    {
+        int idRotulo = -1;
+        while( idRotulo < 0 ) 
+        {
+            listarRotulos( arqRotulos );
+            System.out.print("ID do Rótulo: ");
+            try 
+            {
+                idRotulo = Integer.parseInt( console.nextLine( ) );
+                if( idRotulo < 0 ) {
+                    System.out.println( RED + "ID de rótulo inválido!" + RESET );
+                } // if
+            } catch( NumberFormatException e ) {
+                System.out.println( RED + "Entrada inválida! Por favor, insira um número." + RESET );
+            } // try-catch
+        } // while
+        return idRotulo;
+    } // lerIdRotulo ( )
+
     public static boolean listarTarefas( ArquivoTarefa arqTarefas )
     {
         boolean result = false;
@@ -215,10 +235,11 @@ public class IO
             } 
             else 
             {
+                lista.sort( (r1, r2) -> Integer.compare( r1.getId(), r2.getId() ) );
                 System.out.println( "\nLista de rótulos:" );
                 int tam = lista.size( );
                 for( int i = 0; i < tam; i++ ) {
-                    System.out.println( lista.get(i) );
+                    System.out.println( lista.get(i).getId() + ": " + lista.get(i).getNome() );
                 } // for
                 result = true;
             } // if
