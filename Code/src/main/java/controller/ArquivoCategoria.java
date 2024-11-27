@@ -32,7 +32,7 @@ public class ArquivoCategoria extends Arquivo<Categoria>
         ( 
             ParNomeIDCategoria.class.getConstructor(),
             5, 
-            ".\\Code\\src\\main\\data\\Categorias.db.arvore.idx" 
+            "data\\Categorias.db.arvore.idx" 
         );
     } // ArquivoCategoria ( )
 

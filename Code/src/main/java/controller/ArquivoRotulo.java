@@ -17,7 +17,7 @@ public class ArquivoRotulo extends Arquivo<Rotulo>
         ( 
             ParNomeIDRotulo.class.getConstructor( ),
             5, 
-            ".\\Code\\src\\main\\data\\Rotulos.db.arvore.idx" 
+            "data\\Rotulos.db.arvore.idx" 
         );
     } // ArquivoRotulo ( )
 

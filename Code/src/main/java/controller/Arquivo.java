@@ -32,12 +32,12 @@ public class Arquivo<T extends Registro>
 
     public Arquivo ( String na, Constructor<T> c ) throws Exception 
     {
-        File d = new File(".\\Code\\src\\main\\data");
+        File d = new File(".\\data");
         if( !d.exists( ) ) {
             d.mkdir();
         } // if
 
-        this.nomeArquivo = ".\\Code\\src\\main\\data\\" + na;
+        this.nomeArquivo = "data\\" + na;
         this.construtor = c;
         arquivo = new RandomAccessFile(this.nomeArquivo, "rw");
         if( arquivo.length() < TAM_CABECALHO ) {
@@ -48,8 +48,8 @@ public class Arquivo<T extends Registro>
         (
             ParIDEndereco.class.getConstructor(), 
             4, 
-            this.nomeArquivo + ".d.idx",
-            this.nomeArquivo + ".c.idx"
+            this.nomeArquivo + ".hashDict.idx",
+            this.nomeArquivo + ".hashBuck.idx"
         );
     } // Arquivo ( )
 
