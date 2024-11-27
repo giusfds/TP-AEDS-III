@@ -1,120 +1,107 @@
-# Trabalho Prático AEDs 3 - Parte 2
+# Trabalho Prático AEDs 3 - Parte 3  
 
-## Descrição
+## Descrição  
 
-Este trabalho é a continuação do desenvolvimento de um sistema CRUD (Create, Read, Update, Delete) genérico, agora com a implementação de índices indiretos e um relacionamento 1:N. A extensão do CRUD foi aplicada a uma entidade específica, deixando de ser genérico. Focamos na implementação de um relacionamento entre duas entidades: **Tarefa** e **Categoria**.
+Este trabalho amplia o sistema CRUD desenvolvido nas etapas anteriores, integrando **consultas otimizadas**, **índices 
+inversos** e outras melhorias avançadas de processamento de dados. Nesta fase, também aplicamos o relacionamento 1:N 
+entre **Tarefa** e **Categoria** a cenários mais complexos, utilizando estruturas como **Árvore B+**, **Lista Invertida** 
+e **Tabela Hash Extensível** para otimizar o acesso e a manipulação dos dados.  
 
-Cada tarefa pertence a uma categoria, e nosso sistema agora oferece suporte para buscar tarefas por categoria, assegurando a integridade das operações ao gerenciar a vinculação entre elas.
+## Estrutura do Projeto  
 
-## Estrutura Estendida
+### Diretórios  
 
-### Índice Indireto
-
-O índice indireto foi implementado para a entidade **Categoria**, permitindo a busca de categorias não apenas por ID, mas também pelo nome. Utilizamos uma tabela Hash Extensível para gerenciar este índice indireto, sendo que a classe `ParNomeId` foi criada para armazenar o par (Nome, ID). Esse índice facilita operações como a busca e a verificação da existência de uma categoria pelo nome.
-
-### Relacionamento 1:N
-
-O relacionamento 1:N entre categorias e tarefas foi implementado de modo que cada tarefa possui uma **chave estrangeira** representando o **ID da categoria** à qual pertence. Utilizamos uma **Árvore B+** para manter esse relacionamento e assegurar que seja possível recuperar todas as tarefas de uma determinada categoria.
-
-Além disso, a árvore B+ também foi usada para impedir a exclusão de uma categoria que ainda possui tarefas vinculadas, mantendo assim a integridade dos dados.
-
-## Estrutura do Projeto
-
-### Classes Criadas
-
-1. **ArquivoTarefas**: Estende a classe `Arquivo<T>` e gerencia as operações de CRUD para a entidade Tarefa. Implementa o relacionamento 1:N com categorias, utilizando a Árvore B+.
+- **`controller`**:  
+   Contém as classes responsáveis pela lógica de controle do sistema, implementando as operações CRUD e otimizando a interação com as estruturas de dados.  
+   - **Classes principais**:  
+     - `ArquivoCategoria`: Gerencia a persistência e manipulação de categorias.  
+     - `ArquivoTarefa`: Gerencia a persistência e manipulação de tarefas.  
+     - `IndiceInvertido`: Implementa um índice para buscas eficientes baseadas em termos.  
    
-2. **ArquivoCategorias**: Estende a classe `Arquivo<Categoria>` e inclui o índice indireto por nome de categoria, utilizando a Árvore B+. Implementa também a verificação de dependências ao tentar excluir uma categoria com tarefas vinculadas.
+- **`model`**:  
+   Contém as estruturas de dados utilizadas pelo sistema, como Árvores B+, Tabelas Hash e representações de entidades.  
+   - **Classes principais**:  
+     - `Categoria` e `Tarefa`: Representam as entidades do sistema.  
+     - `ArvoreBMais`: Implementa a Árvore B+ usada no relacionamento 1:N e outras buscas.  
+     - `HashExtensivel`: Gerencia índices indiretos por meio de uma tabela hash extensível.  
+     - `ListaInvertida`: Implementa o índice invertido para busca textual.  
+     - `StopWords`: Gerencia palavras irrelevantes para buscas textuais (com suporte a um arquivo externo `stopword.txt`).  
 
-3. **ParNomeIDCategoria**: Representa o par (Nome, ID) para o índice indireto de categorias.
+- **`util`**:  
+   Contém utilitários para entrada/saída e operações auxiliares.  
+   - **Classes principais**:  
+     - `IO`: Oferece métodos para leitura e escrita em arquivos e auxilia na manipulação de dados.  
 
-4. **ParIdCategoriaIdTarefa**: Representa o par (ID de Categoria, ID de Tarefa) para o relacionamento 1:N na Árvore B+.
+- **`view`**:  
+   Contém a interface de interação com o usuário, organizando menus e exibições de dados.  
+   - **Classes principais**:  
+     - `CategoriasView` e `TarefasView`: Interfaces para interagir com os dados das entidades.  
+     - `PrincipalView`: Classe principal que centraliza o fluxo de interação.  
 
-5. **MenuTarefas e MenuCategorias**: Responsáveis pela interação com o usuário, apresentando menus, capturando entradas e exibindo resultados, além disso também controlam a lógica das operações de CRUD e as interações entre arquivos, visões e o sistema de armazenamento.
+## Estrutura de Dados  
 
-### Relatório de Operações
+1. **Árvore B+**  
+   - Relaciona categorias e tarefas, garantindo acesso eficiente e ordenado.  
 
-- **Buscar**: Implementa a busca utilizando a árvore.
-- **Incluir**: Permite adicionar uma nova categoria ou tarefa, com suas respectivas validações.
-- **Alterar**: Permite atualizar uma tarefa ou categoria existente.
-- **Excluir**: Realiza verificações antes de permitir a exclusão.
+2. **Hash Extensível**  
+   - Gerencia índices indiretos para buscas rápidas por nome de categoria.  
 
-## Experiência de Desenvolvimento
+3. **Lista Invertida**  
+   - Facilita buscas por termos em descrições de tarefas, ignorando palavras irrelevantes (`stopword.txt`).  
 
-Implementamos todos os requisitos para estender o CRUD, criando tanto o índice indireto quanto o relacionamento 1:N. O maior desafio foi compreender e integrar a Árvore B+ para gerenciar o relacionamento entre categorias e tarefas. Apesar disso, a experiência foi enriquecedora, especialmente ao ver como estruturas de dados como tabelas hash extensíveis e árvores B+ se comportam em um cenário prático.
+4. **Estrutura de Arquivos Externos**  
+   - `data`: Diretório para armazenamento dos arquivos binários do sistema.  
+   - `stopword.txt`: Arquivo com palavras irrelevantes usadas pelo índice invertido.  
 
-A integração entre os Menus e os Arquivos seguiu o padrão MVC, o que facilitou a organização do código e a manutenção.
+## Desafios e Aprendizados  
 
-## Checklist
+Os principais desafios desta parte envolveram a otimização do desempenho do sistema para consultas complexas e a 
+implementação de relatórios, que demandaram o processamento eficiente de grandes volumes de dados. A experiência 
+permitiu aprofundar conhecimentos em:  
+- Uso avançado de estruturas de dados como Árvores B+ e tabelas hash.  
+- Processamento de dados em massa com integridade e consistência.  
+- Planejamento de sistemas modulares, permitindo fácil expansão.  
 
-- O CRUD (com índice direto) de categorias foi implementado?  
-   ```
-   SIM
-   ```
-   
-- Há um índice indireto de nomes para as categorias?  
-   ```
-   SIM
-   ```
-   
-- O atributo de ID de categoria, como chave estrangeira, foi criado na classe Tarefa?  
-   ```
-   SIM
-   ```
-   
-- Há uma árvore B+ que registre o relacionamento 1:N entre tarefas e categorias?  
-   ```
-   SIM
-   ```
-    
-- É possível listar as tarefas de uma categoria?  
-   ```
-   SIM
-   ```
-    
-- A remoção de categorias checa se há alguma tarefa vinculada a ela?  
-   ```
-   SIM
-   ```
-    
-- A inclusão da categoria em uma tarefa se limita às categorias existentes?  
-   ```
-   SIM
-   ```
-    
-- O trabalho está funcionando corretamente?  
-   ```
-   SIM
-   ```
-    
-- O trabalho está completo?  
-   ```
-   SIM
-   ```
-   
-- O trabalho é original e não a cópia de um trabalho de outro grupo?  
-   ```
-   SIM
-   ```
+## Checklist  
 
-## Problema / Erro
+- O índice invertido com os termos das tarefas foi criado usando a classe ListaInvertida?
+    ```
+    SIM
+    ```
 
-Nessa segunda parte do projeto, mais especificamente na utilização da Árvore B+, enfrentamos o seguinte problema: após a
-criação da primeira Tarefa, todas as Tarefas seguintes que forem criadas terá um erro de inserção na método `create( )` 
-da `ArvoreBMais.java`.
+- O CRUD de rótulos foi implementado?
+    ```
+    SIM
+    ```
 
-Os passos de testes realizados são:
+- No arquivo de tarefas, os rótulos são incluídos, alterados e excluídos em uma árvore B+? 
+    ```
+    SIM
+    ```
 
-1. Ir no menu de categorias e criar uma nova categoria.
-2. Ir no menu de tarefas e inserir duas novas tarefas.
-3. Após isso, é gerado a seguinte mensagem de erro:
-![error_message](img_error_message.png)
+- É possível buscar tarefas por palavras usando o índice invertido?
+    ```
+    SIM
+    ```
 
-## Integrantes
+- É possível buscar tarefas por rótulos usando uma árvore B+? 
+    ```
+    SIM
+    ```
 
-- [Breno Pires](https://www.linkedin.com/in/brenopiressantos/)
-- [Caio Faria](https://www.linkedin.com/in/caiofdiniz)
-- [Giuseppe Cordeiro](https://www.linkedin.com/in/giuseppecordeiro/)
-- [Vinicius Miranda](https://www.linkedin.com/in/vinimiraa/)
+- O trabalho está completo?
+    ```
+    SIM
+    ```
 
-## FIM
+- O trabalho é original e não a cópia de um trabalho de um colega?
+    ```
+    SIM
+    ```
+
+## Integrantes  
+
+- [Breno Pires](https://www.linkedin.com/in/brenopiressantos/)  
+- [Caio Faria](https://www.linkedin.com/in/caiofdiniz)  
+- [Giuseppe Cordeiro](https://www.linkedin.com/in/giuseppecordeiro/)  
+- [Vinícius Miranda](https://www.linkedin.com/in/vinimiraa/)  
