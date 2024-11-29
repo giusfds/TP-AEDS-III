@@ -2,6 +2,7 @@ package util;
 
 import java.text.Normalizer;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -45,6 +46,17 @@ public class IO
         } // try-catch
         return data;
     } // formatarData ( )
+
+    public static String getDataHoraAtual( ) 
+    {
+        return ( LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd--HH-mm-ss")) );
+    } // getDataHoraAtual ( )
+
+    public static void pressEnter( ) 
+    {
+        System.out.print( "\nPressione ENTER para continuar..." );
+        console.nextLine( );
+    } // pressEnter ( )
 
     private static void listarStatus( ) 
     {
