@@ -41,6 +41,7 @@ public class PrincipalView
         System.out.println("> Início                 ");
         System.out.println("1 - Categorias           ");
         System.out.println("2 - Tarefas              ");
+        System.out.println("3 - Gerenciar Backups    ");
         System.out.println("0 - Sair                 ");
         System.out.print  ("Opção: "                  );
     } // pause ( )
@@ -68,6 +69,9 @@ public class PrincipalView
                 break;
             case 2:
                 (new TarefasView( )).menu( );
+                break;
+            case 3:
+                (new BackupView( )).menu( );
                 break;
             
             default:
