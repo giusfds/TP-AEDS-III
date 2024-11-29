@@ -82,6 +82,15 @@ public class Backup
             System.err.println( "Erro ao escrever arquivo: " + e.getMessage( ) );
         } // try-catch
     } // writeFile ( )
+
+    public double calculateCompressRatio( byte[] dataOriginal, byte[] dataCompressed ) 
+    {
+        int tamanhoOriginal = dataOriginal.length;
+        int tamanhoComprimido = dataCompressed.length;
+    
+        double taxaCompressao = (1 - ((double) tamanhoComprimido / tamanhoOriginal)) * 100;
+        return taxaCompressao;
+    } // calculateCompressRatio ( )
     
     public void createBackup( String backupFile )
     {
@@ -101,9 +110,13 @@ public class Backup
                 File[] files = dataDir.listFiles( );
                 if( files != null ) 
                 {
-                    byte[] serializedData = serializeFiles( files );
-                    serializedData = LZW.codifica( serializedData );
-                    writeFile( subDirPath + "\\" + backupFile, serializedData );
+                    byte[] dataOrig = serializeFiles(files);
+                    byte[] dataCompressed = LZW.codifica(dataOrig);
+    
+                    double compressRatio = calculateCompressRatio( dataOrig, dataCompressed );
+                    System.out.printf( "Taxa de compressão: %.2f%%\n", compressRatio );
+
+                    writeFile( subDirPath + "\\" + backupFile, dataCompressed );
                 } // if
             } // if
         } catch( Exception e ) {
