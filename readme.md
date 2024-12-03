@@ -1,107 +1,123 @@
-# Trabalho Prático AEDs 3 - Parte 3  
+# Trabalho Prático AEDs 3 - Parte 4 (final)
 
 ## Descrição  
 
-Este trabalho amplia o sistema CRUD desenvolvido nas etapas anteriores, integrando **consultas otimizadas**, **índices 
-inversos** e outras melhorias avançadas de processamento de dados. Nesta fase, também aplicamos o relacionamento 1:N 
-entre **Tarefa** e **Categoria** a cenários mais complexos, utilizando estruturas como **Árvore B+**, **Lista Invertida** 
-e **Tabela Hash Extensível** para otimizar o acesso e a manipulação dos dados.  
+Este trabalho prático envolve a implementação de um sistema de **backup compactado** para os arquivos de dados e índices 
+do projeto de tarefas. A funcionalidade principal consiste em buscar todos os arquivos de dados e índices, compactá-los 
+utilizando o algoritmo **LZW** e armazená-los em um único arquivo em uma pasta de backup. O objetivo é permitir a 
+compactação eficiente de todos os arquivos usando um único dicionário de 12 bits, além de possibilitar a recuperação dos arquivos para versões específicas.
+
+### Funcionalidades principais:
+1. **Compactação dos arquivos**: Todos os arquivos de dados e índices são tratados como vetores de bytes e compactados 
+usando o algoritmo **LZW**.
+2. **Armazenamento organizado**: Os backups compactados são salvos em pastas nomeadas com a data/versão do backup.
+3. **Descompactação e recuperação**: O sistema permite recuperar os arquivos de uma versão específica escolhida pelo usuário.
 
 ## Estrutura do Projeto  
 
 ### Diretórios  
 
 - **`controller`**:  
-   Contém as classes responsáveis pela lógica de controle do sistema, implementando as operações CRUD e otimizando a interação com as estruturas de dados.  
+   Gerencia as operações de backup, compactação e descompactação, além de lidar com a interação com os arquivos do sistema.  
    - **Classes principais**:  
-     - `ArquivoCategoria`: Gerencia a persistência e manipulação de categorias.  
-     - `ArquivoTarefa`: Gerencia a persistência e manipulação de tarefas.  
-     - `IndiceInvertido`: Implementa um índice para buscas eficientes baseadas em termos.  
-   
-- **`model`**:  
-   Contém as estruturas de dados utilizadas pelo sistema, como Árvores B+, Tabelas Hash e representações de entidades.  
-   - **Classes principais**:  
-     - `Categoria` e `Tarefa`: Representam as entidades do sistema.  
-     - `ArvoreBMais`: Implementa a Árvore B+ usada no relacionamento 1:N e outras buscas.  
-     - `HashExtensivel`: Gerencia índices indiretos por meio de uma tabela hash extensível.  
-     - `ListaInvertida`: Implementa o índice invertido para busca textual.  
-     - `StopWords`: Gerencia palavras irrelevantes para buscas textuais (com suporte a um arquivo externo `stopword.txt`).  
+     - `Backup`: Classe principal que realiza a compactação, descompactação e gestão dos backups.  
 
-- **`util`**:  
-   Contém utilitários para entrada/saída e operações auxiliares.  
+- **`model`**:  
+   Contém a implementação do algoritmo de compressão **LZW** e outras estruturas necessárias.  
    - **Classes principais**:  
-     - `IO`: Oferece métodos para leitura e escrita em arquivos e auxilia na manipulação de dados.  
+     - `LZW`: Implementa o algoritmo de compactação e descompactação.  
 
 - **`view`**:  
-   Contém a interface de interação com o usuário, organizando menus e exibições de dados.  
+   Interação com o usuário para exibir informações e realizar operações de backup e recuperação.  
    - **Classes principais**:  
-     - `CategoriasView` e `TarefasView`: Interfaces para interagir com os dados das entidades.  
-     - `PrincipalView`: Classe principal que centraliza o fluxo de interação.  
+     - `BackupView`: Interface para o usuário iniciar backups, listar versões e recuperar arquivos.  
 
-## Estrutura de Dados  
+## Fluxo de Operações  
 
-1. **Árvore B+**  
-   - Relaciona categorias e tarefas, garantindo acesso eficiente e ordenado.  
+1. **Criação do Backup**:  
+   - Todos os arquivos de dados e índices são lidos como vetores de bytes.  
+   - O algoritmo **LZW** compacta os arquivos utilizando um único dicionário compartilhado.  
+   - Os dados compactados são salvos em um único arquivo com os seguintes campos para cada arquivo:
+     - Nome do arquivo.
+     - Tamanho do vetor de bytes compactado.
+     - Vetor de bytes compactados.  
+   - O arquivo compactado é armazenado em uma pasta identificada pela data/versão do backup.  
 
-2. **Hash Extensível**  
-   - Gerencia índices indiretos para buscas rápidas por nome de categoria.  
+2. **Recuperação dos Arquivos**:  
+   - O sistema permite ao usuário selecionar a versão do backup a ser restaurada.  
+   - Os arquivos compactados são lidos, descompactados e restaurados para o estado original.  
 
-3. **Lista Invertida**  
-   - Facilita buscas por termos em descrições de tarefas, ignorando palavras irrelevantes (`stopword.txt`).  
+## Classes e Métodos  
 
-4. **Estrutura de Arquivos Externos**  
-   - `data`: Diretório para armazenamento dos arquivos binários do sistema.  
-   - `stopword.txt`: Arquivo com palavras irrelevantes usadas pelo índice invertido.  
+### **Backup**
+Gerencia o processo de backup e recuperação.  
+- **Métodos principais**:  
+  - `createBackup( )`: Cria o backup compactado de todos os arquivos de dados e índices.  
+  - `recoverBackup( )`: Recupera os arquivos de uma versão específica.  
+  - `byte[] readFile( )`: Lê um arquivo como vetor de bytes.  
+  - `void writeFile( )`: Escreve um vetor de bytes em um arquivo.  
+  - `void createDirectory( )`: Cria um diretório, caso não exista.  
 
-## Desafios e Aprendizados  
+### **LZW**
+Implementa o algoritmo de compressão e descompressão.  
+- **Métodos principais**:  
+  - `byte[] codifica( )`: Compacta os dados fornecidos usando o algoritmo LZW.  
+  - `byte[] decodifica( )`: Descompacta os dados fornecidos para o estado original.  
 
-Os principais desafios desta parte envolveram a otimização do desempenho do sistema para consultas complexas e a 
-implementação de relatórios, que demandaram o processamento eficiente de grandes volumes de dados. A experiência 
-permitiu aprofundar conhecimentos em:  
-- Uso avançado de estruturas de dados como Árvores B+ e tabelas hash.  
-- Processamento de dados em massa com integridade e consistência.  
-- Planejamento de sistemas modulares, permitindo fácil expansão.  
+## Experiência e Desafios  
 
-## Checklist  
+O desenvolvimento deste trabalho apresentou os seguintes desafios:  
+1. **Compactação em fluxo**: Garantir que os arquivos fossem lidos e compactados como um fluxo contínuo de bytes, sem 
+sobrecarregar a memória.  
+2. **Gerenciamento do dicionário do LZW**: Usar um único dicionário de 12 bits para compactar múltiplos arquivos foi uma 
+etapa desafiadora, especialmente para manter a eficiência da compressão.  
+3. **Organização dos backups**: Estruturar os backups de forma que permitisse a recuperação exata dos arquivos, com os 
+metadados corretos, foi um ponto crítico do desenvolvimento.  
 
-- O índice invertido com os termos das tarefas foi criado usando a classe ListaInvertida?
+Apesar desses desafios, todos os requisitos foram implementados com sucesso, e os resultados atingiram as expectativas.  
+
+## Checklist
+
+- Há uma rotina de compactação usando o algoritmo LZW para fazer backup dos arquivos?  
     ```
     SIM
     ```
 
-- O CRUD de rótulos foi implementado?
+- Há uma rotina de descompactação usando o algoritmo LZW para recuperação dos arquivos?  
     ```
     SIM
     ```
 
-- No arquivo de tarefas, os rótulos são incluídos, alterados e excluídos em uma árvore B+? 
+- O usuário pode escolher a versão a recuperar?  
     ```
     SIM
     ```
 
-- É possível buscar tarefas por palavras usando o índice invertido?
+- Qual foi a taxa de compressão alcançada por esse backup?  
+    ```
+    56,34%
+    ```
+
+- O trabalho está funcionando corretamente?  
     ```
     SIM
     ```
 
-- É possível buscar tarefas por rótulos usando uma árvore B+? 
+- O trabalho está completo?  
     ```
     SIM
     ```
 
-- O trabalho está completo?
+- O trabalho é original e não a cópia de um trabalho de um colega?  
     ```
     SIM
     ```
 
-- O trabalho é original e não a cópia de um trabalho de um colega?
-    ```
-    SIM
-    ```
+## Integrantes
 
-## Integrantes  
+- [Breno Pires](https://www.linkedin.com/in/brenopiressantos/)
+- [Caio Faria](https://www.linkedin.com/in/caiofdiniz)
+- [Giuseppe Cordeiro](https://www.linkedin.com/in/giuseppecordeiro/)
+- [Vinicius Miranda](https://www.linkedin.com/in/vinimiraa/)
 
-- [Breno Pires](https://www.linkedin.com/in/brenopiressantos/)  
-- [Caio Faria](https://www.linkedin.com/in/caiofdiniz)  
-- [Giuseppe Cordeiro](https://www.linkedin.com/in/giuseppecordeiro/)  
-- [Vinícius Miranda](https://www.linkedin.com/in/vinimiraa/)  
+## FIM
